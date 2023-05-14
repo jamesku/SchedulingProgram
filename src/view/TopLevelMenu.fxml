@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="mainAP" prefHeight="395.0" prefWidth="929.0" style="-fx-background-color: light grey; -fx-border-width: 3; -fx-border-color: blue;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.TopLevelMenu">
+    <children>
+        <Label layoutX="14.0" layoutY="24.0" text="Schedule Management System">
+            <font>
+                <Font name="System Bold" size="12.0" />
+            </font>
+        </Label>
+        <AnchorPane layoutX="7.0" layoutY="51.0" prefHeight="281.0" prefWidth="439.0" style="-fx-border-color: black; -fx-border-radius: 9;">
+            <children>
+                <Label layoutX="16.0" layoutY="19.0" text="Customers">
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font></Label>
+                <TextField fx:id="searchForCustomerField" layoutX="221.0" layoutY="8.0" onKeyTyped="#searchByCustomer" prefHeight="25.0" prefWidth="200.0" promptText="Search by Customer Name or ID" />
+                <TableView fx:id="customersTable" layoutX="9.0" layoutY="36.0" prefHeight="200.0">
+                    <columns>
+                        <TableColumn fx:id="partTablePartID" editable="false" prefWidth="75.0" text="Part ID" />
+                        <TableColumn fx:id="partTablePartName" editable="false" prefWidth="90" sortable="false" text="Part Name" />
+                        <TableColumn fx:id="partTableIL" editable="false" prefWidth="105" sortable="false" text="Inventory Level" />
+                        <TableColumn fx:id="partTablePrice" prefWidth="140" sortable="false" text="Price/ Cost per Unit" />
+                    </columns>
+                </TableView>
+                <Button layoutX="259.0" layoutY="246.0" mnemonicParsing="false" onAction="#addCustomerButtonAction" text="Add" />
+                <Button layoutX="311.0" layoutY="246.0" mnemonicParsing="false" onAction="#modifyCustomerButtonAction" text="Modify" />
+                <Button layoutX="376.0" layoutY="246.0" mnemonicParsing="false" onAction="#deleteCustomerButtonAction" text="Delete" />
+            </children>
+        </AnchorPane>
+        <AnchorPane layoutX="481.0" layoutY="51.0" prefHeight="281.0" prefWidth="439.0" style="-fx-border-color: black; -fx-border-radius: 9;">
+            <children>
+                <Label layoutX="16.0" layoutY="19.0" text="Appointments">
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="searchForAppointmentField" layoutX="221.0" layoutY="8.0" onKeyTyped="#searchByAppointment" prefHeight="25.0" prefWidth="200.0" promptText="Search by Appointment Date" />
+                <TableView fx:id="appointmentsTable" layoutX="9.0" layoutY="36.0" prefHeight="200.0">
+                    <columns>
+                        <TableColumn fx:id="colProdID" editable="false" prefWidth="75.0" text="Product ID" />
+                        <TableColumn fx:id="colProdName" editable="false" prefWidth="93.33331298828125" sortable="false" text="Product Name" />
+                        <TableColumn fx:id="colProdIL" editable="false" prefWidth="99.33331298828125" sortable="false" text="Inventory Level" />
+                        <TableColumn fx:id="colProductPrice" prefWidth="141.33331298828125" sortable="false" text="Price/ Cost per Unit" />
+                    </columns>
+                </TableView>
+                <Button layoutX="259.0" layoutY="246.0" mnemonicParsing="false" onAction="#addAppointmentButtonAction" text="Add" />
+                <Button layoutX="311.0" layoutY="246.0" mnemonicParsing="false" onAction="#modifyAppointmentButtonAction" text="Modify" />
+                <Button layoutX="376.0" layoutY="246.0" mnemonicParsing="false" onAction="#deleteAppointmentButtonAction" text="Delete" />
+            </children>
+        </AnchorPane>
+        <Button layoutX="843.0" layoutY="349.0" mnemonicParsing="false" onAction="#exitHandler" text="Exit" />
+      <Button layoutX="767.0" layoutY="349.0" mnemonicParsing="false" onAction="#logoutHandler" text="Logout" />
+    </children>
+</AnchorPane>

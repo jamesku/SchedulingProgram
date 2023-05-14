@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-
-<GridPane alignment="center" hgap="10" vgap="10" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17" fx:controller="controller.FirstScreenController">
+<GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.FirstScreenController">
    <columnConstraints>
       <ColumnConstraints />
    </columnConstraints>
@@ -14,6 +11,13 @@
       <RowConstraints />
    </rowConstraints>
    <children>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <Label layoutX="86.0" layoutY="27.0" text="Login" />
+            <TextField fx:id="loginUserName" layoutX="26.0" layoutY="69.0" promptText="Username" />
+            <TextField fx:id="loginPassword" layoutX="26.0" layoutY="115.0" promptText="Password" />
+            <Button fx:id="loginSubmit" layoutX="74.0" layoutY="160.0" mnemonicParsing="false" onAction="#submitLogin" text="Submit" />
+            <Label fx:id="loginLocation" layoutX="136.0" layoutY="5.0" text="Location" />
+         </children></AnchorPane>
    </children>
 </GridPane>
