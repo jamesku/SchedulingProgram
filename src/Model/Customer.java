@@ -1,6 +1,7 @@
-package Model;
+package model;
 
 import javafx.collections.ObservableList;
+import model.Appointment;
 
 /**Class to define a Customer.*/
 public class Customer {

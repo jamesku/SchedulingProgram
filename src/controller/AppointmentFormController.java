@@ -1,7 +1,7 @@
 package controller;
 
-import Model.Appointment;
-import Model.Customer;
+import model.Appointment;
+import model.Customer;
 import database.DatabaseIO;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;

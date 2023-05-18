@@ -1,6 +1,6 @@
 package controller;
 
-import Model.Customer;
+import model.Customer;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.Event;

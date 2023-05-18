@@ -1,8 +1,8 @@
 package controller;
 
 import database.DatabaseIO;
-import Model.Appointment;
-import Model.Customer;
+import model.Appointment;
+import model.Customer;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.Event;

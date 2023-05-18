@@ -1,7 +1,7 @@
 package controller;
 
-import Model.Appointment;
-import Model.Customer;
+import model.Appointment;
+import model.Customer;
 import database.DatabaseIO;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -50,7 +50,7 @@ public class CustomerFormController
     @javafx.fxml.FXML
     public void initialize() {
 
-        comboCountry.setItems(DatabaseIO.getCountryCombo);
+        comboCountry.setItems(DatabaseIO.getCountryCombo());
         comboDivision.setItems(DatabaseIO.getDivisionCombo((String)comboCountry.getValue()));
 
         if (newCustomer){

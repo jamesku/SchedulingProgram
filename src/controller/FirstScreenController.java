@@ -1,5 +1,6 @@
 package controller;
 
+import database.DatabaseIO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -13,6 +14,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Locale;
@@ -27,14 +29,13 @@ public class FirstScreenController implements Initializable {
     private Label loginLocation;
     @javafx.fxml.FXML
     private Button loginSubmit;
-    Stage stage;
-    Parent scene;
-
-    Boolean french = false;
     @javafx.fxml.FXML
     private Label loginTitle;
     @javafx.fxml.FXML
     private Label timezoneLabel;
+
+    Stage stage;
+    Parent scene;
 
     String alertText = "Username or Password not recognized, please try again.";
 
@@ -54,8 +55,8 @@ public class FirstScreenController implements Initializable {
         loginLocation.setText(String.valueOf(timeZoneInfo.getZone()));
     }
     @javafx.fxml.FXML
-    public void submitLogin(ActionEvent actionEvent) throws IOException {
-        if(false){
+    public void submitLogin(ActionEvent actionEvent) throws IOException, SQLException {
+        if(DatabaseIO.checkLogin(loginUserName.getText(), loginPassword.getText())){
             Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/TopLevelMenu.fxml"));
             Parent root = loader.load();
@@ -65,6 +66,7 @@ public class FirstScreenController implements Initializable {
             showAlert();
         }
     }
+
 
     /**This method shows an alert based on the passed string text.
      **/

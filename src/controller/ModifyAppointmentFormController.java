@@ -1,6 +1,6 @@
 package controller;
 
-import Model.Appointment;
+import model.Appointment;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

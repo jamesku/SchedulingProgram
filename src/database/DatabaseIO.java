@@ -1,13 +1,20 @@
 package database;
 
-import Model.Customer;
-import Model.Appointment;
+import model.Customer;
+import model.Appointment;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**This class manages the inventory of products and parts. It allows products and parts to be added
  * deleted, found, replaced, associated and disassociated and can return a full list of either set.*/
-public class DatabaseIO {
+public abstract class DatabaseIO {
+
+    /**A String for the sql query*/
+    private static String query;
 
     /**Initialize lists of Parts*/
     private static ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
@@ -117,12 +124,28 @@ public class DatabaseIO {
     }
 
     public static ObservableList<String> getDivisionCombo(String divison){
-
+        ObservableList<String>division = null;
         return division;
     }
 
     public static ObservableList<String> getCountryCombo(){
-
+        ObservableList<String>countryCombo = null;
         return countryCombo;
+    }
+
+    public static boolean checkLogin(String userName, String password) {
+        try {
+            query = "Select password from client_schedule.users where user_name = '" + userName + "'";
+            PreparedStatement ps = JDBC.connection.prepareStatement(query);
+            ResultSet rs = ps.executeQuery(query);
+            rs.next();
+            if ((rs.getString("Password")).equals(password)) {
+                return true;
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+            return false;
+        }
+        return false;
     }
 }

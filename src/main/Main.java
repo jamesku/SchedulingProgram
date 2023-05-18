@@ -1,5 +1,6 @@
 package main;
 
+import database.JDBC;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,10 +17,14 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("../view/FirstScreen.fxml"));
         primaryStage.setScene(new Scene(root, 300, 275));
         primaryStage.show();
+
     }
 
 
     public static void main(String[] args) {
+        JDBC.openConnection();
         launch(args);
+        JDBC.closeConnection();
     }
+
 }
