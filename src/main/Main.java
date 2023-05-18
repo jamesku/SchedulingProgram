@@ -6,12 +6,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.util.Locale;
+
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+//        Locale.setDefault(new Locale("fr"));
         Parent root = FXMLLoader.load(getClass().getResource("../view/FirstScreen.fxml"));
-        primaryStage.setTitle("Schedule Management System");
         primaryStage.setScene(new Scene(root, 300, 275));
         primaryStage.show();
     }

@@ -1,115 +1,154 @@
 package Model;
 
 
+import java.time.LocalDateTime;
+
 /**
  *Class to define an Appointment
  * @author James Kuhr
  */
 public class Appointment {
-    private int id;
-    private String name;
-    private double price;
-    private int stock;
-    private int min;
-    private int max;
+
+    private int apID;
+    private String apTitle;
+    private String apDesc;
+    private String apLocation;
+    private LocalDateTime localDateTimeStart;
+    private LocalDateTime localDateTimeEnd;
+    private int apUID;
+    private int apCID;
+
     /**An object part.
-     * @param max max
-     * @param min min
-     * @param id part id
-     * @param name part name
-     * @param price part price
-     * @param stock inventory*/
-    public Appointment(int id, String name, double price, int stock, int min, int max) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.stock = stock;
-        this.min = min;
-        this.max = max;
+     * @param apID appointment ID
+     * @param apTitle appointment title
+     * @param apDesc appointment description
+     * @param apLocation appointment location
+     * @param localDateTimeStart appointment start
+     * @param localDateTimeEnd appointment end
+     * @param apUID appointment user id
+     * @param apCID appointment customer id*/
+    public Appointment(int apID, String apTitle, String apDesc, String apLocation, LocalDateTime localDateTimeStart,
+                       LocalDateTime localDateTimeEnd, int apUID, int apCID) {
+        this.apID = apID;
+        this.apTitle = apTitle;
+        this.apDesc = apDesc;
+        this.apLocation = apLocation;
+        this.localDateTimeEnd = localDateTimeEnd;
+        this.localDateTimeStart = localDateTimeStart;
+        this.apUID = apUID;
+        this.apCID = apCID;
     }
 
     /**
-     * @return the id
+     * @return the appointment ID
      */
-    public int getId() {
-        return id;
+    public int getapID() {
+        return apID;
     }
 
     /**
-     * @param id the id to set
+     * @param apID the appointment ID to set
      */
-    public void setId(int id) {
-        this.id = id;
+    public void setApID(int apID) {
+        this.apID = apID;
     }
 
     /**
-     * @return the name
+     * @return the appointment title
      */
-    public String getName() {
-        return name;
+    public String getApTitle() {
+        return apTitle;
     }
 
     /**
-     * @param name the name to set
+     * @param apTitle the Appointment Title to set
      */
-    public void setName(String name) {
-        this.name = name;
+    public void setApTitle(String apTitle) {
+        this.apTitle = apTitle;
     }
 
     /**
-     * @return the price
+     * @return the appointment description
      */
-    public double getPrice() {
-        return price;
+    public String getApDesc() {
+        return apDesc;
     }
 
     /**
-     * @param price the price to set
+     * @param apDesc the Appointment Description to set
      */
-    public void setPrice(double price) {
-        this.price = price;
+    public void setApDesc(String apDesc) {
+        this.apDesc = apDesc;
     }
 
     /**
-     * @return the stock
+     * @return the appointment location
      */
-    public int getStock() {
-        return stock;
+    public String getApLocation() {
+        return apLocation;
     }
 
     /**
-     * @param stock the stock to set
+     * @param apLocation the appointment location to set
      */
-    public void setStock(int stock) {
-        this.stock = stock;
+    public void setApLocation(String apLocation) {
+        this.apLocation = apLocation;
     }
 
     /**
-     * @return the min
+     * @return the start date and time of the appointment
      */
-    public int getMin() {
-        return min;
+    public LocalDateTime getLocalDateTimeStart() {
+        return localDateTimeStart;
     }
 
     /**
-     * @param min the min to set
+     * @param localDateTimeStart the start date and time to set
      */
-    public void setMin(int min) {
-        this.min = min;
+    public void setLocalDateTimeStart(LocalDateTime localDateTimeStart) {
+        this.localDateTimeStart = localDateTimeStart;
     }
 
     /**
-     * @return the max
+     * @return the end date and time of the appointment
      */
-    public int getMax() {
-        return max;
+    public LocalDateTime getLocalDateTimeEnd() {
+        return localDateTimeEnd;
     }
 
     /**
-     * @param max the max to set
+     * @param localDateTimeEnd the end date and time to set
      */
-    public void setMax(int max) {
-        this.max = max;
+    public void setLocalDateTimeEnd(LocalDateTime localDateTimeEnd) {
+        this.localDateTimeEnd = localDateTimeEnd;
+    }
+
+    /**
+     * @return the user ID associated with the appointment
+     */
+    public int getApUID() {
+        return apUID;
+    }
+
+    /**
+     * @param apUID the appointment user ID to set
+     */
+    public void setApUID(int apUID) {
+        this.apUID = apUID;
+    }
+
+    /**
+     * @return the customer ID associated with the appointment
+     */
+    public int getApCID() {
+        return apCID;
+    }
+
+    /**
+     * @param apCID the appointment customer ID to set
+     */
+    public void setApCID(int apCID) {
+        this.apCID = apCID;
     }
 
 }

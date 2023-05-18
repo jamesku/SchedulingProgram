@@ -4,128 +4,145 @@ import javafx.collections.ObservableList;
 
 /**Class to define a Customer.*/
 public class Customer {
+
+    private int custID;
+    private String name;
+    private String address;
+    private int postalCode;
+    private int phoneNumber;
+    private String country;
+    private String division;
     private ObservableList<Appointment> associatedAppointments;
-   private int id;
-   private String name;
-   private double price;
-   private int stock;
-   private int min;
-   private int max;
 
     /**An object part.
-     * @param max max
-     * @param min min
-     * @param id part id
-     * @param name part name
-     * @param price part price
-     * @param stock inventory
-     * @param associatedParts list of parts*/
-    public Customer(ObservableList<Appointment> associatedAppointments, int id, String name, double price, int stock, int min, int max) {
+     * @param custID the customer ID
+     * @param name the customer name
+     * @param address the customer address
+     * @param postalCode the customer postal code
+     * @param phoneNumber the customer phone Number
+     * @param country the customer country
+     * @param division the customer division
+     * @param associatedAppointments  the associated appointments*/
+    public Customer(int custID, String name, String address,int postalCode, int phoneNumber,
+                    String country, String division, ObservableList<Appointment> associatedAppointments) {
         this.associatedAppointments = associatedAppointments;
-        this.id = id;
+        this.custID = custID;
         this.name = name;
-        this.price = price;
-        this.stock = stock;
-        this.min = min;
-        this.max = max;
+        this.address = address;
+        this.postalCode = postalCode;
+        this.phoneNumber = phoneNumber;
+        this.country = country;
+        this.division = division;
 
     }
     /**
-     * @param id the id to set
+     * @param custID the customer id to set
      */
-    public void setId(int id) {
-        this.id = id;
+    public void setId(int custID) {
+        this.custID = custID;
     }
     /**
-     * @param name the name to set
+     * @return the customer ID
+     */
+    public int getCustID() {
+        return custID;
+    }
+    /**
+     * @param name the customer name to set
      */
     public void setName(String name) {
         this.name = name;
     }
-
     /**
-     * @param price the price to set
-     */
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    /**
-     * @param stock the stock to set
-     */
-    public void setStock(int stock) {
-        this.stock = stock;
-    }
-
-    /**
-     * @param min the min to set
-     */
-    public void setMin(int min) {
-        this.min = min;
-    }
-    /**
-     * @param max the max to set
-     */
-    public void setMax(int max) {
-        this.max = max;
-    }
-    /**
-     * @return the id
-     */
-    public int getId() {
-        return id;
-    }
-    /**
-     * @return the name
+     * @return the customer name
      */
     public String getName() {
         return name;
     }
     /**
-     * @return the price
+     * @param address the customer address to set
      */
-    public double getPrice() {
-        return price;
+    public void setAddress(String address) {
+        this.address = address;
     }
     /**
-     * @return the stock
+     * @return the customer address
      */
-    public int getStock() {
-        return stock;
+    public String getAddress() {
+        return address;
     }
     /**
-     * @return the min
+     * @param postalCode the customer postal code to set
      */
-    public int getMin() {
-        return min;
+    public void setPostalCode(int postalCode) {
+        this.postalCode = postalCode;
     }
     /**
-     * @return the max
+     * @return the customer postal code
      */
-    public int getMax() {
-        return max;
+    public int getPostalCode() {
+        return postalCode;
     }
-
-/**adds the associated appointment to the customer
- * @param app The appointment to associate
- * */
-    public void addAssociatedPart(Appointment app){
+    /**
+     * @param phoneNumber the customer phone number to set
+     */
+    public void setPhoneNumber(int phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+    /**
+     * @return the customer phone number
+     */
+    public int getPhoneNumber() {
+        return phoneNumber;
+    }
+    /**
+     * @param country the customer country to set
+     */
+    public void setCountry(String country) {
+        this.country = country;
+    }
+    /**
+     * @return the customer country
+     */
+    public String getCountry() {
+        return country;
+    }
+    /**
+     * @param division the customer division to set
+     */
+    public void setDivision(String division) {
+        this.division = division;
+    }
+    /**
+     * @return the customer division
+     */
+    public String getDivision() {
+        return division;
+    }
+    /**
+     * @param associatedAppointments the list of associated appointments to set
+     */
+    public void setAssociatedAppointments(ObservableList<Appointment> associatedAppointments) {
+        this.associatedAppointments = associatedAppointments;
+    }
+    /**adds the associated appointment to the customer
+    * @param app The appointment to associate
+    * */
+    public void addAssociatedAppointment(Appointment app){
         associatedAppointments.add(app);
     }
-
     /**removes the associated appointment from the customer
      * @param selectedAssociatedApp The appointment to disassociate
      * @return boolean if appointment is deleted.
      * */
-    public boolean deleteAssociatedPart(Appointment selectedAssociatedApp){
+    public boolean deleteAssociatedAppointment(Appointment selectedAssociatedApp){
         associatedAppointments.remove(selectedAssociatedApp);
         return true;
-
     }
     /**
-     * @return all associated parts
+     * @return all associated appointment
      */
-    public ObservableList<Appointment> getAllAssociatedParts(){
+    public ObservableList<Appointment> getAllAssociatedAppointments(){
         return associatedAppointments;
     }
 

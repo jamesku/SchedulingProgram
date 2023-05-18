@@ -1,9 +1,7 @@
-package Controller;
+package controller;
 
 import Model.Customer;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -11,7 +9,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -95,9 +92,9 @@ public class ModifyCustomerFormController
 //        associatedPartIL.setCellValueFactory(new PropertyValueFactory<>("stock"));
 //        associatedPartPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
 //
-//        modifyProductID.setText(passedProduct.getId()+"");
-//        modifyProductName.setText(passedProduct.getName());
-//        modifyProductInv.setText(passedProduct.getStock()+"");
+//        customerID.setText(passedProduct.getId()+"");
+//        customerName.setText(passedProduct.getName());
+//        customerInv.setText(passedProduct.getStock()+"");
 //        modifyProductPrice.setText(passedProduct.getPrice()+"");
 //        modifyProductMax.setText(passedProduct.getMax()+"");
 //        modifyProductMin.setText(passedProduct.getMin()+"");

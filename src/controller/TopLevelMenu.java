@@ -1,6 +1,6 @@
-package Controller;
+package controller;
 
-import Database.DatabaseIO;
+import database.DatabaseIO;
 import Model.Appointment;
 import Model.Customer;
 import javafx.application.Platform;
@@ -12,6 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -30,31 +31,47 @@ public class TopLevelMenu implements Initializable
 //    private Part passedPart = null;
 
     @javafx.fxml.FXML
-    private TableColumn partTablePartID;
-    @javafx.fxml.FXML
-    private TableColumn partTablePartName;
-    @javafx.fxml.FXML
-    private TableColumn partTableIL;
-    @javafx.fxml.FXML
-    private TableColumn partTablePrice;
-    @javafx.fxml.FXML
-    private TableColumn colProdID;
-    @javafx.fxml.FXML
-    private TableColumn colProdName;
-    @javafx.fxml.FXML
-    private TableColumn colProdIL;
-    @javafx.fxml.FXML
-    private TableColumn colProductPrice;
-    @javafx.fxml.FXML
     private AnchorPane mainAP;
     @javafx.fxml.FXML
     private TextField searchForCustomerField;
     @javafx.fxml.FXML
     private TableView customersTable;
     @javafx.fxml.FXML
-    private TextField searchForAppointmentField;
-    @javafx.fxml.FXML
     private TableView appointmentsTable;
+    @javafx.fxml.FXML
+    private TableColumn tableCustomerID;
+    @javafx.fxml.FXML
+    private TableColumn tableCustomerName;
+    @javafx.fxml.FXML
+    private TableColumn tableAddress;
+    @javafx.fxml.FXML
+    private TableColumn tablePostalCode;
+    @javafx.fxml.FXML
+    private TableColumn tablePhone;
+    @javafx.fxml.FXML
+    private TableColumn tableCountry;
+    @javafx.fxml.FXML
+    private TableColumn tableDivision;
+    @javafx.fxml.FXML
+    private TableColumn tableApptID;
+    @javafx.fxml.FXML
+    private TableColumn tableTitle;
+    @javafx.fxml.FXML
+    private TableColumn tableDescription;
+    @javafx.fxml.FXML
+    private TableColumn tableLocation;
+    @javafx.fxml.FXML
+    private TableColumn tableContact;
+    @javafx.fxml.FXML
+    private TableColumn tableType;
+    @javafx.fxml.FXML
+    private TableColumn tableStart;
+    @javafx.fxml.FXML
+    private TableColumn tableEnd;
+    @javafx.fxml.FXML
+    private TableColumn tableCID;
+    @javafx.fxml.FXML
+    private TableColumn tableUID;
 
 
     /**This function sets up the initial values.  It brings in all the parts and products in the system
@@ -62,18 +79,26 @@ public class TopLevelMenu implements Initializable
      * a listener on the window that is changed in other menus.*/
     @Deprecated
     public void initialize(URL url, ResourceBundle resourceBundle) {
-//        partsTable.setItems(Inventory.getAllParts());
-//        partTablePartID.setCellValueFactory(new PropertyValueFactory<>("id"));
-//        partTablePartName.setCellValueFactory(new PropertyValueFactory<>("name"));
-//        partTableIL.setCellValueFactory(new PropertyValueFactory<>("stock"));
-//        partTablePrice.setCellValueFactory(new PropertyValueFactory<>("price"));
-//
-//        productsTable.setItems(Inventory.getAllProducts());
-//        colProdID.setCellValueFactory(new PropertyValueFactory<>("id"));
-//        colProdName.setCellValueFactory(new PropertyValueFactory<>("name"));
-//        colProdIL.setCellValueFactory(new PropertyValueFactory<>("stock"));
-//        colProductPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
-//
+        customersTable.setItems(DatabaseIO.getAllCustomers());
+        tableCustomerID.setCellValueFactory(new PropertyValueFactory<>("Customer_ID"));
+        tableCustomerName.setCellValueFactory(new PropertyValueFactory<>("Customer_Name"));
+        tableAddress.setCellValueFactory(new PropertyValueFactory<>("Address"));
+        tablePostalCode.setCellValueFactory(new PropertyValueFactory<>("Postal_Code"));
+        tablePhone.setCellValueFactory(new PropertyValueFactory<>("Phone"));
+        tableCountry.setCellValueFactory(new PropertyValueFactory<>("Country_ID"));
+        tableDivision.setCellValueFactory(new PropertyValueFactory<>("Division_ID"));
+
+        appointmentsTable.setItems(DatabaseIO.getAllAppointments());
+        tableApptID.setCellValueFactory(new PropertyValueFactory<>("Appointment_ID"));
+        tableTitle.setCellValueFactory(new PropertyValueFactory<>("Title"));
+        tableDescription.setCellValueFactory(new PropertyValueFactory<>("Description"));
+        tableLocation.setCellValueFactory(new PropertyValueFactory<>("Location"));
+        tableContact.setCellValueFactory(new PropertyValueFactory<>("Contact_ID"));
+        tableType.setCellValueFactory(new PropertyValueFactory<>("Type"));
+        tableStart.setCellValueFactory(new PropertyValueFactory<>("Start"));
+        tableEnd.setCellValueFactory(new PropertyValueFactory<>("End"));
+        tableCID.setCellValueFactory(new PropertyValueFactory<>("Customer_ID"));
+        tableUID.setCellValueFactory(new PropertyValueFactory<>("User_ID"));
         Platform.runLater(new Runnable() {
             @Override public void run() {
                 setListener();
@@ -134,7 +159,7 @@ public class TopLevelMenu implements Initializable
      * all Parts that have matched names, even if the name is incomplete.  If that list returns nothing,
      * the function tried to match via ID number.  It displays on the table matched parts.
      * @param event  the triggering user event*/
-    @javafx.fxml.FXML
+    @Deprecated
     public void searchByAppointment(Event event) {
 //        String q = searchForPartField.getText();
 //        ObservableList<Part> searchedParts = Inventory.lookupPart(q);
@@ -218,7 +243,7 @@ public class TopLevelMenu implements Initializable
             Appointment passedAppointment = (Appointment) appointmentsTable.getSelectionModel().getSelectedItem();
             ModifyAppointmentFormController.receiveData(passedAppointment);
             stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("modifyPartForm.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("AppointmentForm.fxml"));
             Parent root = loader.load();
             stage.setScene(new Scene(root));
             stage.show();
@@ -231,19 +256,19 @@ public class TopLevelMenu implements Initializable
      * confirm the user activity.  Additionally, if no part is deleted, it alerts the user.
      * @param actionEvent the button being pressed*/
     public void deleteAppointmentButtonAction(ActionEvent actionEvent) {
-//        if(confirmationAlert("Are you sure you want to delete that part?")) {
-//            Part p = (Part) partsTable.getSelectionModel().getSelectedItem();
-//            if (!Inventory.deletePart(p)) {
-//                showAlert("Part not deleted");
-//            }
-//        }
+        if(confirmationAlert("Are you sure you want to delete that Appointment?")) {
+            Appointment p = (Appointment) appointmentsTable.getSelectionModel().getSelectedItem();
+            if (!DatabaseIO.deleteAppointment(p)) {
+                showAlert("Part not deleted");
+            }
+        }
     }
     /**This function moves to the add customer menu.
      * @param actionEvent the button being pressed
      * @throws IOException IOException*/
     public void addCustomerButtonAction(ActionEvent actionEvent) throws IOException{
         stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("/View/addCustomerForm.fxml"));
+        scene = FXMLLoader.load(getClass().getResource("/View/CustomerForm.fxml"));
         stage.setScene(new Scene(scene));
         stage.show();
     }
@@ -255,14 +280,14 @@ public class TopLevelMenu implements Initializable
     public void modifyCustomerButtonAction(ActionEvent actionEvent) throws IOException {
         if(customersTable.getSelectionModel().getSelectedItem() != null) {
             Customer passCustomer = (Customer) customersTable.getSelectionModel().getSelectedItem();
-            ModifyCustomerFormController.receiveData(passCustomer);
+            CustomerFormController.receiveData(passCustomer);
             Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("modifyProductForm.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("CustomerForm.fxml"));
             Parent root = loader.load();
             stage.setScene(new Scene(root));
             stage.show();
         } else{
-            showAlert("Select a product to modify!");
+            showAlert("Select a customer record to modify!");
         }
     }
     /**This function deletes the selected product. Before deletion it uses a confirmation alert to
@@ -270,10 +295,11 @@ public class TopLevelMenu implements Initializable
      * part, and if it does it does not delete hte product. If no product is deleted, it alerts the user.
      * @param actionEvent the button being pressed*/
     public void deleteCustomerButtonAction(ActionEvent actionEvent) {
-        if(confirmationAlert("Are you sure you want to delete that product?")) {
+        if(confirmationAlert("Are you sure you want to delete that Customer record? All associated appointments" +
+                "will be deleted as well.")) {
             Customer p = (Customer) customersTable.getSelectionModel().getSelectedItem();
-            if (p.getAllAssociatedParts().size() > 1) {
-                showAlert("Cannot delete a customer that has an appointment associated with them.");
+            if (p.getAllAssociatedAppointments().size() > 1) {
+                ////////////////////////////////ADD DELETION OF ALL APPOINTMENTS HERE
                 return;
             }
             if (!DatabaseIO.deleteCustomer(p)) {

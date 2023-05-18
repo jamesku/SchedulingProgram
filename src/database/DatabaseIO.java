@@ -1,4 +1,4 @@
-package Database;
+package database;
 
 import Model.Customer;
 import Model.Appointment;
@@ -75,18 +75,16 @@ public class DatabaseIO {
         return namedProducts;
     }
 /**This replaces a customer in the Arraylist with another customer.
- * @param index the index for the replacement
  * @param selectedCustomer the new part to be inserted
  * */
-    public static void updateCustomer(int index, Customer selectedCustomer){
+    public static void updateCustomer(Customer selectedCustomer){
 
 //        allCustomers.set(index, selectedPart);
     }
     /**This replaces a product in the Arraylist with another part.
-     * @param index the index for the replacement
      * @param newAppointment the new part to be inserted
      * */
-    public static void updateAppointment(int index, Appointment newAppointment){
+    public static void updateAppointment(Appointment newAppointment){
 //        allAppointments.set(index, newAppointment);
         }
     /**This deletes a part from the ObservableList.
@@ -116,5 +114,15 @@ public class DatabaseIO {
     public static ObservableList<Appointment> getAllAppointments(){
 
         return allAppointments;
+    }
+
+    public static ObservableList<String> getDivisionCombo(String divison){
+
+        return division;
+    }
+
+    public static ObservableList<String> getCountryCombo(){
+
+        return countryCombo;
     }
 }
