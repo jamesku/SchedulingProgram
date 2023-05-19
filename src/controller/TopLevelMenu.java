@@ -88,7 +88,7 @@ public class TopLevelMenu implements Initializable
         tableCountry.setCellValueFactory(new PropertyValueFactory<>("country"));
         tableDivision.setCellValueFactory(new PropertyValueFactory<>("division"));
 
-        appointmentsTable.setItems(DatabaseIO.getAllAppointments());
+//        appointmentsTable.setItems(DatabaseIO.getAllAppointments());
         tableApptID.setCellValueFactory(new PropertyValueFactory<>("Appointment_ID"));
         tableTitle.setCellValueFactory(new PropertyValueFactory<>("Title"));
         tableDescription.setCellValueFactory(new PropertyValueFactory<>("Description"));
@@ -298,13 +298,8 @@ public class TopLevelMenu implements Initializable
         if(confirmationAlert("Are you sure you want to delete that Customer record? All associated appointments" +
                 "will be deleted as well.")) {
             Customer p = (Customer) customersTable.getSelectionModel().getSelectedItem();
-            if (p.getAllAssociatedAppointments().size() > 1) {
-                ////////////////////////////////ADD DELETION OF ALL APPOINTMENTS HERE
-                return;
-            }
-            if (!DatabaseIO.deleteCustomer(p)) {
-                showAlert("Product not deleted");
-            }
+            DatabaseIO.deleteAssociatedAppointments(p.getCustID());
+            DatabaseIO.deleteCustomer(p.getCustID());
         }
     }
     /**this function close the program when called.  The user must confirm the exit.

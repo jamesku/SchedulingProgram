@@ -22,11 +22,24 @@ public abstract class DatabaseIO {
     private static ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
     /** This adds a given part to the database.
      * @param newCustomer the part to add*/
+
     public static void addCustomer(Customer newCustomer){
-//        allParts.add(newPart);
-//        //trouble 1: filling test data
-//        System.out.println(newPart.getName());
+        try {
+            query = "INSERT INTO customers(Customer_Name, Address, Postal_Code, "+
+                    "Phone, Division_ID) VALUES (" +
+                    "'"+ newCustomer.getName()+"',"+
+                    "'"+ newCustomer.getAddress()+"',"+
+                    "'"+ newCustomer.getPostalCode()+"',"+
+                    "'"+ newCustomer.getPhoneNumber()+"',"+
+                    "(SELECT Division_ID FROM first_level_divisions WHERE Division = '"
+                    + newCustomer.getDivision()+"'));";
+            PreparedStatement ps = JDBC.connection.prepareStatement(query);
+            int rowsaffected = ps.executeUpdate(query);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
+
     /** This adds an appointment to the list of appointments.
      * @param newAppointment the part to add*/
     public static void addAppointment(Appointment newAppointment){
@@ -94,13 +107,18 @@ public abstract class DatabaseIO {
     public static void updateAppointment(Appointment newAppointment){
 //        allAppointments.set(index, newAppointment);
         }
-    /**This deletes a part from the ObservableList.
-     * @param selectedCustomer The part to delete.
-     * @return A boolean about if the part is deleted.*/
-    public static boolean deleteCustomer(Customer selectedCustomer){
-//        boolean remove = allParts.remove(selectedPart);
-//        return remove;
-        return true;
+    /**This deletes a customer from the database.
+     * @param custID The customer id associated with the customer to delete.
+     **/
+    public static void deleteCustomer(int custID){
+        try {
+            query = "DELETE * FROM customers Where Customer_ID = '"
+                    + custID+"';";
+            PreparedStatement ps = JDBC.connection.prepareStatement(query);
+            int rowsaffected = ps.executeUpdate(query);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
     /**This deletes a product from the ObservableList.
      * @param selectedAppointment The product to delete.
@@ -136,19 +154,50 @@ public abstract class DatabaseIO {
     }
     /**This returns the complete list of products.
      * @return allProducts The complete list of products.*/
-    public static ObservableList<Appointment> getAllAppointments(){
-
-        return allAppointments;
+    public static void deleteAssociatedAppointments(int custID){
+        try {
+            query = "DELETE * FROM appointments Where Customer_ID = '"
+                    + custID+"';";
+            PreparedStatement ps = JDBC.connection.prepareStatement(query);
+            int rowsaffected = ps.executeUpdate(query);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
-    public static ObservableList<String> getDivisionCombo(String divison){
-        ObservableList<String>division = null;
-        return division;
+    public static ObservableList<String> getDivisionCombo(String country){
+        ObservableList<String> allDivisions = FXCollections.observableArrayList();
+        try {
+            query = "SELECT Division " +
+                    "FROM first_level_divisions WHERE Country_ID = "+
+                    "(SELECT Country_ID FROM countries WHERE Country = '"+country+"');";
+            PreparedStatement ps = JDBC.connection.prepareStatement(query);
+            ResultSet rs = ps.executeQuery(query);
+            while(rs.next()) {
+                allDivisions.add(rs.getString("Division"));
+            }
+            return allDivisions;
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
     }
 
     public static ObservableList<String> getCountryCombo(){
-        ObservableList<String>countryCombo = null;
-        return countryCombo;
+        ObservableList<String> allCountries = FXCollections.observableArrayList();
+        try {
+            query = "SELECT Country " +
+                    "FROM countries;";
+            PreparedStatement ps = JDBC.connection.prepareStatement(query);
+            ResultSet rs = ps.executeQuery(query);
+            while(rs.next()) {
+                allCountries.add(rs.getString("Country"));
+            }
+            return allCountries;
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
     }
 
     public static boolean checkLogin(String userName, String password) {

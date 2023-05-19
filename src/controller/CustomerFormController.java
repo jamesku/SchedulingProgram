@@ -136,16 +136,20 @@ public class CustomerFormController
      * and returns the main menu.
      * @param actionEvent button click*/
     @Deprecated
-    public void saveHandler(ActionEvent actionEvent) {
+    public void saveHandler(ActionEvent actionEvent) throws IOException {
         int custID = 0;
         String name = null;
         String address = null;
         String postalCode = null;
         String phoneNumber = null;
-        String country = null;
-        String division = null;
+        String country;
+        String division;
 
-        custID = Integer.parseInt(customerID.getText());
+        try{
+        custID = Integer.parseInt(customerID.getText());}
+        catch (Exception e){
+            custID=1;
+        }
         if(!customerName.getText().isEmpty()){
             name = customerName.getText();
         } else {
@@ -172,21 +176,28 @@ public class CustomerFormController
             return;
         }
 
-        int selectedIndex = comboCountry.getSelectionModel().getSelectedIndex();
+        if(comboCountry.getValue() != null){
         Object selectedItem = comboCountry.getSelectionModel().getSelectedItem().toString();
-        country = (String) selectedItem;
+        country = (String) selectedItem;} else {
+        showAlert("Please pick a country");
+        return;
+        }
 
-        int selectedIndexDiv = comboDivision.getSelectionModel().getSelectedIndex();
+        if(comboDivision.getValue() != null){
         Object selectedItemDiv = comboDivision.getSelectionModel().getSelectedItem().toString();
-        country = (String) selectedItemDiv;
+        division = (String) selectedItemDiv;} else
+        {showAlert("Please pick a division");
+            return;}
 
         ObservableList<Appointment> newList = FXCollections.observableArrayList();
 
         Customer pass = new Customer(custID, name, address,postalCode,phoneNumber,country,division);
         if (newCustomer) {
             DatabaseIO.addCustomer(pass);
+            cancelHandler(actionEvent);
         } else{
             DatabaseIO.updateCustomer(pass);
+            cancelHandler(actionEvent);
         }
     }
 
@@ -200,11 +211,5 @@ public class CustomerFormController
         alert.showAndWait();
     }
 
-//    public boolean checkInt(String value){
-//        try {int postalCode = Integer.parseInt(value);
-//        return true;}
-//        catch (Exception e)
-//            { return false;
-//            }
-//    }
+
 }
