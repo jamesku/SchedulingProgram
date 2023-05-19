@@ -98,8 +98,21 @@ public abstract class DatabaseIO {
  * @param selectedCustomer the new part to be inserted
  * */
     public static void updateCustomer(Customer selectedCustomer){
-
-//        allCustomers.set(index, selectedPart);
+        try {
+            query = "UPDATE customers SET "+
+                    "Customer_Name = '" + selectedCustomer.getName()+"',"+
+                    "Address = '" + selectedCustomer.getAddress()+"',"+
+                    "Phone = '" + selectedCustomer.getPhoneNumber()+"',"+
+                    "Postal_Code = '" + selectedCustomer.getPostalCode()+"',"+
+                    "Division_ID = " +
+                    "(SELECT Division_ID FROM first_level_divisions WHERE Division = '"
+                            + selectedCustomer.getDivision()+"') WHERE "+
+                    "Customer_ID = "+selectedCustomer.getCustID()+";";
+                PreparedStatement ps = JDBC.connection.prepareStatement(query);
+            int rowsaffected = ps.executeUpdate(query);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
     /**This replaces a product in the Arraylist with another part.
      * @param newAppointment the new part to be inserted
@@ -112,7 +125,7 @@ public abstract class DatabaseIO {
      **/
     public static void deleteCustomer(int custID){
         try {
-            query = "DELETE * FROM customers Where Customer_ID = '"
+            query = "DELETE FROM customers Where Customer_ID = '"
                     + custID+"';";
             PreparedStatement ps = JDBC.connection.prepareStatement(query);
             int rowsaffected = ps.executeUpdate(query);
@@ -156,7 +169,7 @@ public abstract class DatabaseIO {
      * @return allProducts The complete list of products.*/
     public static void deleteAssociatedAppointments(int custID){
         try {
-            query = "DELETE * FROM appointments Where Customer_ID = '"
+            query = "DELETE FROM appointments Where Customer_ID = '"
                     + custID+"';";
             PreparedStatement ps = JDBC.connection.prepareStatement(query);
             int rowsaffected = ps.executeUpdate(query);

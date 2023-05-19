@@ -51,7 +51,7 @@ public class CustomerFormController
     public void initialize() {
 
         comboCountry.setItems(DatabaseIO.getCountryCombo());
-        comboDivision.setItems(DatabaseIO.getDivisionCombo((String)comboCountry.getValue()));
+
 
         if (newCustomer){
             customerID.setText("Will be auto-generated");
@@ -63,6 +63,7 @@ public class CustomerFormController
             customerPhone.setText(passedCustomer.getPhoneNumber() + "");
             comboCountry.setValue(passedCustomer.getCountry());
             comboDivision.setValue(passedCustomer.getDivision());
+            comboDivision.setItems(DatabaseIO.getDivisionCombo((String)comboCountry.getValue()));
         }
         Platform.runLater(new Runnable() {
             @Override

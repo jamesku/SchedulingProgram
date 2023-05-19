@@ -282,7 +282,7 @@ public class TopLevelMenu implements Initializable
             Customer passCustomer = (Customer) customersTable.getSelectionModel().getSelectedItem();
             CustomerFormController.receiveData(passCustomer);
             Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("CustomerForm.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CustomerForm.fxml"));
             Parent root = loader.load();
             stage.setScene(new Scene(root));
             stage.show();
@@ -295,11 +295,12 @@ public class TopLevelMenu implements Initializable
      * part, and if it does it does not delete hte product. If no product is deleted, it alerts the user.
      * @param actionEvent the button being pressed*/
     public void deleteCustomerButtonAction(ActionEvent actionEvent) {
-        if(confirmationAlert("Are you sure you want to delete that Customer record? All associated appointments" +
+        if(confirmationAlert("Are you sure you want to delete that Customer record? All associated appointments " +
                 "will be deleted as well.")) {
             Customer p = (Customer) customersTable.getSelectionModel().getSelectedItem();
             DatabaseIO.deleteAssociatedAppointments(p.getCustID());
             DatabaseIO.deleteCustomer(p.getCustID());
+            customersTable.setItems(DatabaseIO.getAllCustomers());
         }
     }
     /**this function close the program when called.  The user must confirm the exit.
