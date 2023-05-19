@@ -83,8 +83,8 @@ public class TopLevelMenu implements Initializable
         tableCustomerID.setCellValueFactory(new PropertyValueFactory<>("custID"));
         tableCustomerName.setCellValueFactory(new PropertyValueFactory<>("name"));
         tableAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
-        tablePostalCode.setCellValueFactory(new PropertyValueFactory<>("postalcode"));
-        tablePhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        tablePostalCode.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
+        tablePhone.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
         tableCountry.setCellValueFactory(new PropertyValueFactory<>("country"));
         tableDivision.setCellValueFactory(new PropertyValueFactory<>("division"));
 

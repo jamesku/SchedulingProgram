@@ -9,8 +9,8 @@ public class Customer {
     private int custID;
     private String name;
     private String address;
-    private int postalCode;
-    private int phoneNumber;
+    private String postalCode;
+    private String phoneNumber;
     private String country;
     private String division;
     private ObservableList<Appointment> associatedAppointments;
@@ -24,9 +24,9 @@ public class Customer {
      * @param country the customer country
      * @param division the customer division
      * @param associatedAppointments  the associated appointments*/
-    public Customer(int custID, String name, String address,int postalCode, int phoneNumber,
-                    String country, String division, ObservableList<Appointment> associatedAppointments) {
-        this.associatedAppointments = associatedAppointments;
+    public Customer(int custID, String name, String address,String postalCode, String phoneNumber,
+                    String country, String division) {
+//        this.associatedAppointments = associatedAppointments;
         this.custID = custID;
         this.name = name;
         this.address = address;
@@ -75,25 +75,25 @@ public class Customer {
     /**
      * @param postalCode the customer postal code to set
      */
-    public void setPostalCode(int postalCode) {
+    public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
     /**
      * @return the customer postal code
      */
-    public int getPostalCode() {
+    public String getPostalCode() {
         return postalCode;
     }
     /**
      * @param phoneNumber the customer phone number to set
      */
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
     /**
      * @return the customer phone number
      */
-    public int getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
     /**
