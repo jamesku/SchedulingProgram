@@ -17,7 +17,7 @@ public abstract class DatabaseIO {
     private static String query;
 
     /**Initialize lists of Parts*/
-    private static ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
+//    private static ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
     /**Initialize list of Products */
     private static ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
     /** This adds a given part to the database.
@@ -110,11 +110,29 @@ public abstract class DatabaseIO {
 //        return remove;
         return true;
     }
-/**This returns the complete list of parts.
- * @return allParts The complete list of parts.*/
+/**This returns the complete list of customers.
+ * @return allCustomers The complete list of customers.*/
     public static ObservableList<Customer> getAllCustomers(){
-
-        return allCustomers;
+        ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
+        try {
+            query = "SELECT Customer_ID, Customer_Name, Address, Postal_Code, Phone, Country, Division " +
+                    "FROM customers " +
+                    "JOIN first_level_divisions ON customers.Division_ID = first_level_divisions.Division_ID " +
+                    "JOIN countries ON first_level_divisions.Country_ID = countries.Country_ID;";
+            PreparedStatement ps = JDBC.connection.prepareStatement(query);
+            ResultSet rs = ps.executeQuery(query);
+            while(rs.next()) {
+                allCustomers.add(new Customer(rs.getInt("Customer_ID"), rs.getString("Customer_Name"),
+                        rs.getString("Address"), rs.getString("Postal_Code"),
+                        rs.getString("Phone"),rs.getString("Country"),
+                        rs.getString("Division")));
+                System.out.println(allCustomers);
+            }
+            return allCustomers;
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
     }
     /**This returns the complete list of products.
      * @return allProducts The complete list of products.*/

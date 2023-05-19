@@ -80,13 +80,13 @@ public class TopLevelMenu implements Initializable
     @Deprecated
     public void initialize(URL url, ResourceBundle resourceBundle) {
         customersTable.setItems(DatabaseIO.getAllCustomers());
-        tableCustomerID.setCellValueFactory(new PropertyValueFactory<>("Customer_ID"));
-        tableCustomerName.setCellValueFactory(new PropertyValueFactory<>("Customer_Name"));
-        tableAddress.setCellValueFactory(new PropertyValueFactory<>("Address"));
-        tablePostalCode.setCellValueFactory(new PropertyValueFactory<>("Postal_Code"));
-        tablePhone.setCellValueFactory(new PropertyValueFactory<>("Phone"));
-        tableCountry.setCellValueFactory(new PropertyValueFactory<>("Country_ID"));
-        tableDivision.setCellValueFactory(new PropertyValueFactory<>("Division_ID"));
+        tableCustomerID.setCellValueFactory(new PropertyValueFactory<>("custID"));
+        tableCustomerName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tableAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
+        tablePostalCode.setCellValueFactory(new PropertyValueFactory<>("postalcode"));
+        tablePhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        tableCountry.setCellValueFactory(new PropertyValueFactory<>("country"));
+        tableDivision.setCellValueFactory(new PropertyValueFactory<>("division"));
 
         appointmentsTable.setItems(DatabaseIO.getAllAppointments());
         tableApptID.setCellValueFactory(new PropertyValueFactory<>("Appointment_ID"));

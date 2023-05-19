@@ -140,8 +140,8 @@ public class CustomerFormController
         int custID = 0;
         String name = null;
         String address = null;
-        int postalCode = 0;
-        int phoneNumber = 0;
+        String postalCode = null;
+        String phoneNumber = null;
         String country = null;
         String division = null;
 
@@ -160,12 +160,14 @@ public class CustomerFormController
             return;
         }
 
-        try { postalCode = Integer.parseInt(customerPC.getText());} catch (Exception e) {
+        try { int temp = Integer.parseInt(customerPC.getText()); postalCode = customerPC.getText();}
+        catch (Exception e) {
             showAlert("Please check the postal code value.");
             return;
         }
 
-        try { phoneNumber = Integer.parseInt(customerPhone.getText());} catch (Exception e){
+        try { int temp = Integer.parseInt(customerPhone.getText()); phoneNumber=customerPhone.getText();}
+        catch (Exception e){
             showAlert("Please check the phone number value, please use numbers only.");
             return;
         }
@@ -180,7 +182,7 @@ public class CustomerFormController
 
         ObservableList<Appointment> newList = FXCollections.observableArrayList();
 
-        Customer pass = new Customer(custID, name, address,postalCode,phoneNumber,country,division,newList);
+        Customer pass = new Customer(custID, name, address,postalCode,phoneNumber,country,division);
         if (newCustomer) {
             DatabaseIO.addCustomer(pass);
         } else{
@@ -198,4 +200,11 @@ public class CustomerFormController
         alert.showAndWait();
     }
 
+//    public boolean checkInt(String value){
+//        try {int postalCode = Integer.parseInt(value);
+//        return true;}
+//        catch (Exception e)
+//            { return false;
+//            }
+//    }
 }
