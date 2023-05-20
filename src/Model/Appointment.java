@@ -13,36 +13,71 @@ public class Appointment {
     private String apTitle;
     private String apDesc;
     private String apLocation;
+    private String apType;
     private LocalDateTime localDateTimeStart;
     private LocalDateTime localDateTimeEnd;
     private int apUID;
     private int apCID;
+    private int apContactID;
 
     /**An object part.
      * @param apID appointment ID
      * @param apTitle appointment title
      * @param apDesc appointment description
      * @param apLocation appointment location
+     * @param apType appointment location
      * @param localDateTimeStart appointment start
      * @param localDateTimeEnd appointment end
      * @param apUID appointment user id
-     * @param apCID appointment customer id*/
-    public Appointment(int apID, String apTitle, String apDesc, String apLocation, LocalDateTime localDateTimeStart,
-                       LocalDateTime localDateTimeEnd, int apUID, int apCID) {
+     * @param apCID appointment customer id
+     * @param apContactID appointment customer id*/
+    public Appointment(int apID, String apTitle, String apDesc, String apLocation, String apType, LocalDateTime localDateTimeStart,
+                       LocalDateTime localDateTimeEnd, int apCID, int apUID, int apContactID) {
         this.apID = apID;
         this.apTitle = apTitle;
         this.apDesc = apDesc;
         this.apLocation = apLocation;
+        this.apType = apType;
         this.localDateTimeEnd = localDateTimeEnd;
         this.localDateTimeStart = localDateTimeStart;
         this.apUID = apUID;
         this.apCID = apCID;
+        this.apContactID = apContactID;
     }
+
+    /**
+     * @return the appointment contact ID
+     */
+    public int getApContactID() {
+        return apContactID;
+    }
+
+    /**
+     * @param apContactID the appointment contact ID to set
+     */
+    public void setApContactID(int apContactID) {
+        this.apContactID = apContactID;
+    }
+
+    /**
+     * @return the appointment type
+     */
+    public String getApType() {
+        return apType;
+    }
+
+    /**
+     * @param apType the appointment Type to set
+     */
+    public void setApType(String apType) {
+        this.apType = apType;
+    }
+
 
     /**
      * @return the appointment ID
      */
-    public int getapID() {
+    public int getApID() {
         return apID;
     }
 
