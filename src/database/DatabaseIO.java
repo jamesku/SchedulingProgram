@@ -260,4 +260,55 @@ public abstract class DatabaseIO {
         }
         return false;
     }
+
+    public static ObservableList getCustomerCombo() {
+        ObservableList<String> allCustomers = FXCollections.observableArrayList();
+        try {
+            query = "SELECT Customer_ID " +
+                    "FROM customers;";
+            PreparedStatement ps = JDBC.connection.prepareStatement(query);
+            ResultSet rs = ps.executeQuery(query);
+            while(rs.next()) {
+                allCustomers.add(rs.getString("Country"));
+            }
+            return allCustomers;
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
+    public static ObservableList getUserCombo() {
+        ObservableList<String> allUsers = FXCollections.observableArrayList();
+        try {
+            query = "SELECT User_ID " +
+                    "FROM users;";
+            PreparedStatement ps = JDBC.connection.prepareStatement(query);
+            ResultSet rs = ps.executeQuery(query);
+            while(rs.next()) {
+                allUsers.add(rs.getString("Country"));
+            }
+            return allUsers;
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
+    public static ObservableList getContactCombo() {
+        ObservableList<String> allContacts = FXCollections.observableArrayList();
+        try {
+            query = "SELECT Contact_ID " +
+                    "FROM contacts;";
+            PreparedStatement ps = JDBC.connection.prepareStatement(query);
+            ResultSet rs = ps.executeQuery(query);
+            while(rs.next()) {
+                allContacts.add(rs.getString("Country"));
+            }
+            return allContacts;
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
 }

@@ -15,7 +15,7 @@
         <Label layoutX="26.0" layoutY="170.0" text="Description" />
         <Label layoutX="24.0" layoutY="210.0" text="Location" />
         <Label layoutX="300.0" layoutY="211.0" text="Type" />
-        <Label fx:id="partsVariableLabel" layoutX="297.0" layoutY="90.0" text="Customer_ID" />
+        <Label fx:id="lab" layoutX="297.0" layoutY="90.0" text="Customer_ID" />
         <Label layoutX="300.0" layoutY="168.0" text="Contact" />
         <TextField fx:id="ApptID" disable="true" editable="false" layoutX="123.0" layoutY="86.0" />
         <TextField fx:id="ApptTitle" layoutX="123.0" layoutY="125.0" />

@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.collections.ObservableList;
 import model.Appointment;
 import model.Customer;
 import database.DatabaseIO;
@@ -69,6 +70,28 @@ public class AppointmentFormController
      * */
     @javafx.fxml.FXML
     public void initialize() {
+
+        ApptCID.setItems(DatabaseIO.getCustomerCombo());
+        ApptUID.setItems(DatabaseIO.getUserCombo());
+        ApptContact.setItems(DatabaseIO.getContactCombo());
+        ObservableList availableTypes = ();
+        ApptType.setItems(availableTypes);
+        ApptStart.setItems(availabletimes);
+        ApptEnd.setItems(availabletimes);
+
+        if (newAppointment){
+            ApptID.setText("Will be auto-generated");
+        } else {
+            ApptID.setText(passedAppointment.getApID() + "");
+            ApptTitle.setText(passedAppointment.getApTitle());
+            ApptDesc.setText(passedAppointment.getApDesc() + "");
+            ApptLocation.setText(passedAppointment.getApLocation() + "");
+            ApptType.setValue(passedAppointment.getApType() + "");
+            ApptContact.setValue(passedAppointment.getApContactID());
+            ApptCID.setValue(passedAppointment.getApCID());
+            ApptUID.setValue(passedAppointment.getApUID());
+       //work on time into months and an hour drop down, pass in all the combobox values
+        }
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -115,7 +138,7 @@ public class AppointmentFormController
      * @param actionEvent button click
      * @throws IOException IOException*/
     @Deprecated
-    public void AppointmentSaveHandler(ActionEvent actionEvent) throws IOException {
+    public void ApptSaveHandler(ActionEvent actionEvent) throws IOException {
     int apID = 0;
     String apTitle = null;
     String apDesc = null;
@@ -204,6 +227,18 @@ public class AppointmentFormController
         alert.setHeaderText(null);
         alert.setContentText(alertText);
         alert.showAndWait();
+    }
+
+    /** This method sends the user back to the main menu.
+     * @param actionEvent button click
+     * @throws IOException IOexception*/
+    @Deprecated
+    public void cancelHandler(ActionEvent actionEvent) throws IOException {
+        stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
+        scene = FXMLLoader.load(getClass().getResource("/View/TopLevelMenu.fxml"));
+        stage.setScene(new Scene(scene));
+        stage.show();
+
     }
 
 }

@@ -227,7 +227,7 @@ public class TopLevelMenu implements Initializable
      * @throws IOException IOException*/
     public void addAppointmentButtonAction(ActionEvent actionEvent) throws IOException {
         stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("/View/addAppointmentForm.fxml"));
+        scene = FXMLLoader.load(getClass().getResource("/View/AppointmentForm.fxml"));
         stage.setScene(new Scene(scene));
         stage.show();
     }
