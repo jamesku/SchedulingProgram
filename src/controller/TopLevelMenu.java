@@ -88,17 +88,22 @@ public class TopLevelMenu implements Initializable
         tableCountry.setCellValueFactory(new PropertyValueFactory<>("country"));
         tableDivision.setCellValueFactory(new PropertyValueFactory<>("division"));
 
-//        appointmentsTable.setItems(DatabaseIO.getAllAppointments());
-        tableApptID.setCellValueFactory(new PropertyValueFactory<>("Appointment_ID"));
-        tableTitle.setCellValueFactory(new PropertyValueFactory<>("Title"));
-        tableDescription.setCellValueFactory(new PropertyValueFactory<>("Description"));
-        tableLocation.setCellValueFactory(new PropertyValueFactory<>("Location"));
-        tableContact.setCellValueFactory(new PropertyValueFactory<>("Contact_ID"));
-        tableType.setCellValueFactory(new PropertyValueFactory<>("Type"));
-        tableStart.setCellValueFactory(new PropertyValueFactory<>("Start"));
-        tableEnd.setCellValueFactory(new PropertyValueFactory<>("End"));
-        tableCID.setCellValueFactory(new PropertyValueFactory<>("Customer_ID"));
-        tableUID.setCellValueFactory(new PropertyValueFactory<>("User_ID"));
+        tableApptID.setCellValueFactory(new PropertyValueFactory<>("apID"));
+        tableTitle.setCellValueFactory(new PropertyValueFactory<>("apTitle"));
+        tableDescription.setCellValueFactory(new PropertyValueFactory<>("apDesc"));
+        tableLocation.setCellValueFactory(new PropertyValueFactory<>("apLocation"));
+        tableType.setCellValueFactory(new PropertyValueFactory<>("apType"));
+        tableContact.setCellValueFactory(new PropertyValueFactory<>("apContactID"));
+        tableStart.setCellValueFactory(new PropertyValueFactory<>("localDateTimeStart"));
+        tableEnd.setCellValueFactory(new PropertyValueFactory<>("localDateTimeEnd"));
+        tableCID.setCellValueFactory(new PropertyValueFactory<>("apCID"));
+        tableUID.setCellValueFactory(new PropertyValueFactory<>("apUID"));
+
+        customersTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                selectedCustomerHandler();
+            }
+        });
         Platform.runLater(new Runnable() {
             @Override public void run() {
                 setListener();
@@ -132,6 +137,11 @@ public class TopLevelMenu implements Initializable
         alert.setHeaderText(null);
         alert.setContentText(alertText);
         alert.showAndWait();
+    }
+
+    public void selectedCustomerHandler(){
+        Customer selectedCustomer = (Customer) customersTable.getSelectionModel().getSelectedItem();
+        appointmentsTable.setItems(DatabaseIO.getSelectAppointments(selectedCustomer.getCustID()));
     }
 
     /**This method shows a confirmation alert based on the passed string text.

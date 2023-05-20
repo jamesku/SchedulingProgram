@@ -125,12 +125,13 @@ public class AppointmentFormController
     LocalTime apEnd = null;
     int apCID = 0;
     int apUID = 0;
-    String apContact = null;
+    int apContact = 0;
     String apType = null;
 
     apID = Integer.parseInt(ApptID.getText());
     apCID= Integer.parseInt((String)ApptCID.getValue());
     apUID= Integer.parseInt((String)ApptUID.getValue());
+    apContact= Integer.parseInt((String)ApptContact.getValue());
 
         if((ApptDate.getValue() != null)){
             apDate = (LocalDate) ApptType.getValue();
@@ -177,12 +178,6 @@ public class AppointmentFormController
             return;
         }
 
-        if(!((String)(ApptContact.getValue())).isEmpty()){
-            apContact = (String)ApptContact.getValue();
-        } else {
-            showAlert("Please check the contact value");
-            return;
-        }
 
         if(!((String)(ApptType.getValue())).isEmpty()){
             apType = (String)ApptType.getValue();
@@ -191,8 +186,8 @@ public class AppointmentFormController
             return;
         }
 
-        Appointment pass = new Appointment(apID, apTitle, apDesc, apLocation,localDateTimeStart,
-                localDateTimeEnd,apUID,apCID);
+        Appointment pass = new Appointment(apID, apTitle, apDesc, apLocation,apType, localDateTimeStart,
+                localDateTimeEnd,apCID,apUID, apContact);
         if (newAppointment) {
             DatabaseIO.addAppointment(pass);
         } else{

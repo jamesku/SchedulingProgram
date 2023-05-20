@@ -8,6 +8,7 @@ import javafx.collections.ObservableList;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 /**This class manages the inventory of products and parts. It allows products and parts to be added
  * deleted, found, replaced, associated and disassociated and can return a full list of either set.*/
@@ -133,6 +134,37 @@ public abstract class DatabaseIO {
             System.out.println(e);
         }
     }
+
+    /**This returns the complete list of customers.
+     * @return allCustomers The complete list of customers.*/
+    public static ObservableList<Appointment> getSelectAppointments(int custID){
+        ObservableList<Appointment> selectAppointments = FXCollections.observableArrayList();
+        try {
+            query = "SELECT Appointment_ID, Title, Description, Location, Type, Start, End, " +
+                    "Customer_ID, User_ID, Contact_ID "+
+                    "FROM appointments WHERE Customer_ID = "+custID+
+                    ";";
+            PreparedStatement ps = JDBC.connection.prepareStatement(query);
+            ResultSet rs = ps.executeQuery(query);
+            while(rs.next()) {
+                selectAppointments.add(new Appointment(rs.getInt("Appointment_ID"),
+                        rs.getString("Title"),
+                        rs.getString("Description"), rs.getString("Location"),
+                        rs.getString("Type"),
+                        rs.getObject("Start",LocalDateTime.class),
+                        rs.getObject("End",LocalDateTime.class),
+                        rs.getInt("Customer_ID"),
+                        rs.getInt("User_ID"),
+                        rs.getInt("Contact_ID")));
+            }
+            return selectAppointments;
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
+
     /**This deletes a product from the ObservableList.
      * @param selectedAppointment The product to delete.
      * @return A boolean about if the product is deleted.*/
