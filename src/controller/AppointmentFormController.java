@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Appointment;
 import model.Customer;
@@ -14,12 +15,12 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import model.StData;
 
 import java.io.IOException;
 import java.sql.Time;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class AppointmentFormController
@@ -74,10 +75,10 @@ public class AppointmentFormController
         ApptCID.setItems(DatabaseIO.getCustomerCombo());
         ApptUID.setItems(DatabaseIO.getUserCombo());
         ApptContact.setItems(DatabaseIO.getContactCombo());
-        ObservableList availableTypes = ();
-        ApptType.setItems(availableTypes);
-        ApptStart.setItems(availabletimes);
-        ApptEnd.setItems(availabletimes);
+
+        ApptType.setItems(StData.getAvailableTypes());
+        ApptStart.setItems(StData.getTimeBoxesStart());
+        ApptEnd.setItems(StData.getTimeBoxesEnd());
 
         if (newAppointment){
             ApptID.setText("Will be auto-generated");
@@ -87,7 +88,7 @@ public class AppointmentFormController
             ApptDesc.setText(passedAppointment.getApDesc() + "");
             ApptLocation.setText(passedAppointment.getApLocation() + "");
             ApptType.setValue(passedAppointment.getApType() + "");
-            ApptContact.setValue(passedAppointment.getApContactID());
+            ApptContact.setValue(passedAppointment.getApContactName());
             ApptCID.setValue(passedAppointment.getApCID());
             ApptUID.setValue(passedAppointment.getApUID());
        //work on time into months and an hour drop down, pass in all the combobox values
@@ -148,37 +149,59 @@ public class AppointmentFormController
     LocalTime apEnd = null;
     int apCID = 0;
     int apUID = 0;
-    int apContact = 0;
+    String apContact = null;
     String apType = null;
 
-    apID = Integer.parseInt(ApptID.getText());
-    apCID= Integer.parseInt((String)ApptCID.getValue());
-    apUID= Integer.parseInt((String)ApptUID.getValue());
-    apContact= Integer.parseInt((String)ApptContact.getValue());
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-        if((ApptDate.getValue() != null)){
-            apDate = (LocalDate) ApptType.getValue();
+    if (!newAppointment) {
+        apID = Integer.parseInt(ApptID.getText());
+    } else {apID = 0;};
+
+    if(ApptCID.getValue() != null && !((String)ApptCID.getValue()).isEmpty()) {
+        apCID = Integer.parseInt((String) ApptCID.getValue());
+    }else{showAlert("Please check the Customer_ID value");}
+
+    if(ApptUID.getValue() != null && !((String)ApptUID.getValue()).isEmpty()) {
+        apUID= Integer.parseInt((String)ApptUID.getValue());
+    }else{showAlert("Please check the User_ID value");}
+
+        if(ApptContact.getValue() != null && !((String)ApptContact.getValue()).isEmpty()) {
+            apContact= (String)ApptContact.getValue();
+        }else{showAlert("Please check the Contact value");}
+
+        if(ApptDate.getValue() != null){
+            apDate = LocalDate.parse(ApptDate.getValue().toString(), formatter);
         } else {
             showAlert("Please check the type value");
             return;
         }
 
-    if(!((String)ApptStart.getValue()).isEmpty()){
-            apStart = (LocalTime) ApptStart.getValue();
+    if(ApptStart.getValue() != null && !((String)ApptStart.getValue()).isEmpty()){
+        String s = ApptStart.getValue().toString();
+        s = s.substring(0, s.length() - 3);
+        if(s.length() <5){ s = "0"+s;}
+        apStart = LocalTime.parse(s+":00");
+//        apStart = convertToUTC(apStart);
         } else {
             showAlert("Please check the start time");
             return;
         }
 
-    if(!((String)ApptEnd.getValue()).isEmpty()){
-            apEnd = (LocalTime)ApptEnd.getValue();
+    if(ApptEnd.getValue() != null && !((String)ApptEnd.getValue()).isEmpty()){
+        String t = ApptEnd.getValue().toString();
+        t = t.substring(0, t.length() - 3);
+        if(t.length() <5){ t = "0"+t;}
+            apEnd = LocalTime.parse(t+":00");
+//            apEnd = convertToUTC(apEnd);
         } else {
             showAlert("Please check the end time");
             return;
         }
-
         LocalDateTime localDateTimeStart = apDate.atTime(apStart);
         LocalDateTime localDateTimeEnd = apDate.atTime(apEnd);
+//        ZonedDateTime zonedDateTimeStart = ZonedDateTime.of(localDateTimeStart, ZoneId.systemDefault());
+//        ZonedDateTime zonedDateTimeEnd = ZonedDateTime.of(localDateTimeEnd, ZoneId.systemDefault());
 
     if(!ApptTitle.getText().isEmpty()){
            apTitle = ApptTitle.getText();
@@ -201,9 +224,8 @@ public class AppointmentFormController
             return;
         }
 
-
-        if(!((String)(ApptType.getValue())).isEmpty()){
-            apType = (String)ApptType.getValue();
+        if (ApptType.getValue() != null && !((String) ApptType.getValue()).isEmpty()) {
+            apType = (String) ApptType.getValue();
         } else {
             showAlert("Please check the type value");
             return;
@@ -213,8 +235,10 @@ public class AppointmentFormController
                 localDateTimeEnd,apCID,apUID, apContact);
         if (newAppointment) {
             DatabaseIO.addAppointment(pass);
+            cancelHandler(actionEvent);
         } else{
             DatabaseIO.updateAppointment(pass);
+            cancelHandler(actionEvent);
         }
 
     }
@@ -240,5 +264,13 @@ public class AppointmentFormController
         stage.show();
 
     }
+
+//    public LocalDateTime convertToUTC(LocalDateTime dt){
+//        ZonedDateTime zdt = dt.atZone(ZoneId.systemDefault());
+//        ZoneId utc = ZoneId.of("UTC");
+//        ZonedDateTime utcLocalDateTime = zdt.now(utc);
+//
+//        return utcLocalDateTime;
+//    }
 
 }

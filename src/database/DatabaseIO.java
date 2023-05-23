@@ -8,7 +8,9 @@ import javafx.collections.ObservableList;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 /**This class manages the inventory of products and parts. It allows products and parts to be added
  * deleted, found, replaced, associated and disassociated and can return a full list of either set.*/
@@ -44,8 +46,24 @@ public abstract class DatabaseIO {
     /** This adds an appointment to the list of appointments.
      * @param newAppointment the part to add*/
     public static void addAppointment(Appointment newAppointment){
-
-//        allProducts.add(newProduct);
+        try {
+            query = "INSERT INTO appointments(Title, Description, Location, Type, Start, End, User_ID, "+
+                    "Customer_ID, Contact_ID) VALUES (" +
+                    "'"+ newAppointment.getApTitle()+"', "+
+                    "'"+ newAppointment.getApDesc()+"', "+
+                    "'"+ newAppointment.getApLocation()+"', "+
+                    "'"+ newAppointment.getApType()+"', "+
+                    "'"+ Timestamp.valueOf(newAppointment.getLocalDateTimeStart())+"', "+
+                    "'"+ Timestamp.valueOf(newAppointment.getLocalDateTimeEnd())+"', "+
+                    ""+ newAppointment.getApUID()+", "+
+                    "'"+ newAppointment.getApCID()+"', "+
+                    "(SELECT Contact_ID FROM contacts WHERE Contact_name = '"
+                    + newAppointment.getApContactName()+"'));";
+            PreparedStatement ps = JDBC.connection.prepareStatement(query);
+            int rowsaffected = ps.executeUpdate(query);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
     /** This finds a given part in the list of parts based on an id number.
      * @param customerId the part to add
@@ -124,14 +142,16 @@ public abstract class DatabaseIO {
     /**This deletes a customer from the database.
      * @param custID The customer id associated with the customer to delete.
      **/
-    public static void deleteCustomer(int custID){
+    public static boolean deleteCustomer(int custID){
         try {
             query = "DELETE FROM customers Where Customer_ID = '"
                     + custID+"';";
             PreparedStatement ps = JDBC.connection.prepareStatement(query);
             int rowsaffected = ps.executeUpdate(query);
+            return true;
         } catch (Exception e) {
             System.out.println(e);
+            return false;
         }
     }
 
@@ -152,10 +172,10 @@ public abstract class DatabaseIO {
                         rs.getString("Description"), rs.getString("Location"),
                         rs.getString("Type"),
                         rs.getObject("Start",LocalDateTime.class),
-                        rs.getObject("End",LocalDateTime.class),
+                        rs.getObject("End", LocalDateTime.class),
                         rs.getInt("Customer_ID"),
                         rs.getInt("User_ID"),
-                        rs.getInt("Contact_ID")));
+                        rs.getString("Contact_ID")));
             }
             return selectAppointments;
         } catch (Exception e) {
@@ -269,7 +289,7 @@ public abstract class DatabaseIO {
             PreparedStatement ps = JDBC.connection.prepareStatement(query);
             ResultSet rs = ps.executeQuery(query);
             while(rs.next()) {
-                allCustomers.add(rs.getString("Country"));
+                allCustomers.add(rs.getInt("Customer_ID")+"");
             }
             return allCustomers;
         } catch (Exception e) {
@@ -286,7 +306,7 @@ public abstract class DatabaseIO {
             PreparedStatement ps = JDBC.connection.prepareStatement(query);
             ResultSet rs = ps.executeQuery(query);
             while(rs.next()) {
-                allUsers.add(rs.getString("Country"));
+                allUsers.add(rs.getInt("User_ID")+"");
             }
             return allUsers;
         } catch (Exception e) {
@@ -298,12 +318,12 @@ public abstract class DatabaseIO {
     public static ObservableList getContactCombo() {
         ObservableList<String> allContacts = FXCollections.observableArrayList();
         try {
-            query = "SELECT Contact_ID " +
+            query = "SELECT Contact_Name " +
                     "FROM contacts;";
             PreparedStatement ps = JDBC.connection.prepareStatement(query);
             ResultSet rs = ps.executeQuery(query);
             while(rs.next()) {
-                allContacts.add(rs.getString("Country"));
+                allContacts.add(rs.getString("Contact_Name"));
             }
             return allContacts;
         } catch (Exception e) {

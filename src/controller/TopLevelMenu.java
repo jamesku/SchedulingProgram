@@ -268,8 +268,12 @@ public class TopLevelMenu implements Initializable
     public void deleteAppointmentButtonAction(ActionEvent actionEvent) {
         if(confirmationAlert("Are you sure you want to delete that Appointment?")) {
             Appointment p = (Appointment) appointmentsTable.getSelectionModel().getSelectedItem();
+            int tempApID = p.getApID();
+            String tempApType = p.getApType();
             if (!DatabaseIO.deleteAppointment(p)) {
                 showAlert("Part not deleted");
+            } else {
+                showAlert("Appointment "+tempApID+", type: "+tempApType+" deleted.");
             }
         }
     }
@@ -309,7 +313,9 @@ public class TopLevelMenu implements Initializable
                 "will be deleted as well.")) {
             Customer p = (Customer) customersTable.getSelectionModel().getSelectedItem();
             DatabaseIO.deleteAssociatedAppointments(p.getCustID());
-            DatabaseIO.deleteCustomer(p.getCustID());
+            if(DatabaseIO.deleteCustomer(p.getCustID())){
+                showAlert("Customer removed");
+            }
             customersTable.setItems(DatabaseIO.getAllCustomers());
         }
     }
