@@ -22,6 +22,7 @@ import java.sql.Time;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Locale;
 
 public class AppointmentFormController
 {
@@ -179,9 +180,9 @@ public class AppointmentFormController
 
     if(ApptStart.getValue() != null && !((String)ApptStart.getValue()).isEmpty()){
         String s = ApptStart.getValue().toString();
-        s = s.substring(0, s.length() - 3);
-        if(s.length() <5){ s = "0"+s;}
-        apStart = LocalTime.parse(s+":00");
+        if(s.length() <7){ s = "0"+s;}
+        apStart = LocalTime.parse(s, DateTimeFormatter.ofPattern("hh:mm a", Locale.getDefault()));
+//        apStart = LocalTime.parse(s+":00");
 //        apStart = convertToUTC(apStart);
         } else {
             showAlert("Please check the start time");
@@ -190,9 +191,8 @@ public class AppointmentFormController
 
     if(ApptEnd.getValue() != null && !((String)ApptEnd.getValue()).isEmpty()){
         String t = ApptEnd.getValue().toString();
-        t = t.substring(0, t.length() - 3);
-        if(t.length() <5){ t = "0"+t;}
-            apEnd = LocalTime.parse(t+":00");
+        if(t.length() <7){ t = "0"+t;}
+        apEnd = LocalTime.parse(t, DateTimeFormatter.ofPattern("hh:mm a", Locale.getDefault()));
 //            apEnd = convertToUTC(apEnd);
         } else {
             showAlert("Please check the end time");

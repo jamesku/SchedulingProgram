@@ -93,7 +93,7 @@ public class TopLevelMenu implements Initializable
         tableDescription.setCellValueFactory(new PropertyValueFactory<>("apDesc"));
         tableLocation.setCellValueFactory(new PropertyValueFactory<>("apLocation"));
         tableType.setCellValueFactory(new PropertyValueFactory<>("apType"));
-        tableContact.setCellValueFactory(new PropertyValueFactory<>("apContactID"));
+        tableContact.setCellValueFactory(new PropertyValueFactory<>("apContactName"));
         tableStart.setCellValueFactory(new PropertyValueFactory<>("localDateTimeStart"));
         tableEnd.setCellValueFactory(new PropertyValueFactory<>("localDateTimeEnd"));
         tableCID.setCellValueFactory(new PropertyValueFactory<>("apCID"));
@@ -251,9 +251,9 @@ public class TopLevelMenu implements Initializable
         //had to include a check to make sure something was selected
         if(appointmentsTable.getSelectionModel().getSelectedItem() != null) {
             Appointment passedAppointment = (Appointment) appointmentsTable.getSelectionModel().getSelectedItem();
-            ModifyAppointmentFormController.receiveData(passedAppointment);
+            AppointmentFormController.receiveData(passedAppointment);
             stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("AppointmentForm.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/AppointmentForm.fxml"));
             Parent root = loader.load();
             stage.setScene(new Scene(root));
             stage.show();
@@ -273,6 +273,7 @@ public class TopLevelMenu implements Initializable
             if (!DatabaseIO.deleteAppointment(p)) {
                 showAlert("Part not deleted");
             } else {
+                selectedCustomerHandler();
                 showAlert("Appointment "+tempApID+", type: "+tempApType+" deleted.");
             }
         }

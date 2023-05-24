@@ -11,6 +11,8 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 /**This class manages the inventory of products and parts. It allows products and parts to be added
  * deleted, found, replaced, associated and disassociated and can return a full list of either set.*/
@@ -137,7 +139,9 @@ public abstract class DatabaseIO {
      * @param newAppointment the new part to be inserted
      * */
     public static void updateAppointment(Appointment newAppointment){
-//        allAppointments.set(index, newAppointment);
+
+
+
         }
     /**This deletes a customer from the database.
      * @param custID The customer id associated with the customer to delete.
@@ -161,21 +165,25 @@ public abstract class DatabaseIO {
         ObservableList<Appointment> selectAppointments = FXCollections.observableArrayList();
         try {
             query = "SELECT Appointment_ID, Title, Description, Location, Type, Start, End, " +
-                    "Customer_ID, User_ID, Contact_ID "+
-                    "FROM appointments WHERE Customer_ID = "+custID+
-                    ";";
+                    "Customer_ID, User_ID, Contact_Name "+
+                    "FROM appointments JOIN contacts ON appointments.Contact_ID = contacts.Contact_ID "+
+                    "WHERE Customer_ID = "+custID+ ";";
             PreparedStatement ps = JDBC.connection.prepareStatement(query);
             ResultSet rs = ps.executeQuery(query);
+
+//            LocalDateTime localDate = LocalDateTime.parse(strLocalDate, formatter);
             while(rs.next()) {
+                String start = rs.getTimestamp("Start").toLocalDateTime().toString();
+                String end = rs.getTimestamp("End").toLocalDateTime().toString();
                 selectAppointments.add(new Appointment(rs.getInt("Appointment_ID"),
                         rs.getString("Title"),
                         rs.getString("Description"), rs.getString("Location"),
                         rs.getString("Type"),
-                        rs.getObject("Start",LocalDateTime.class),
-                        rs.getObject("End", LocalDateTime.class),
+                        rs.getTimestamp("Start").toLocalDateTime(),
+                        rs.getTimestamp("End").toLocalDateTime(),
                         rs.getInt("Customer_ID"),
                         rs.getInt("User_ID"),
-                        rs.getString("Contact_ID")));
+                        rs.getString("Contact_Name")));
             }
             return selectAppointments;
         } catch (Exception e) {
