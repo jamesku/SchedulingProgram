@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="mainAP" prefHeight="521.0" prefWidth="929.0" style="-fx-background-color: light grey; -fx-border-width: 3; -fx-border-color: blue;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TopLevelMenu">
+<AnchorPane fx:id="mainAP" prefHeight="521.0" prefWidth="929.0" style="-fx-background-color: light grey; -fx-border-width: 3; -fx-border-color: blue;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TopLevelMenu">
     <children>
         <AnchorPane layoutX="7.0" layoutY="23.0" prefHeight="218.0" prefWidth="884.0" style="-fx-border-color: black; -fx-border-radius: 9;">
             <children>
@@ -40,13 +40,13 @@
                 <TableView fx:id="appointmentsTable" layoutX="9.0" layoutY="42.0" prefHeight="175.0" prefWidth="859.0">
                     <columns>
                         <TableColumn fx:id="tableApptID" editable="false" prefWidth="104.33333015441895" text="Appointment ID" />
-                        <TableColumn fx:id="tableTitle" editable="false" prefWidth="75.66666412353516" sortable="false" text="Title" />
-                        <TableColumn fx:id="tableDescription" editable="false" prefWidth="119.66670227050781" sortable="false" text="Description" />
-                        <TableColumn fx:id="tableLocation" prefWidth="110.33334350585938" sortable="false" text="Location" />
-                        <TableColumn fx:id="tableContact" prefWidth="75.0" text="Contact" />
-                        <TableColumn fx:id="tableType" prefWidth="75.0" text="Type" />
-                        <TableColumn fx:id="tableStart" prefWidth="75.0" text="Start" />
-                        <TableColumn fx:id="tableEnd" prefWidth="75.0" text="End" />
+                        <TableColumn fx:id="tableTitle" editable="false" prefWidth="69.0" sortable="false" text="Title" />
+                        <TableColumn fx:id="tableDescription" editable="false" prefWidth="94.0" sortable="false" text="Description" />
+                        <TableColumn fx:id="tableLocation" prefWidth="73.0" sortable="false" text="Location" />
+                        <TableColumn fx:id="tableContact" prefWidth="79.0" text="Contact" />
+                        <TableColumn fx:id="tableType" prefWidth="64.0" text="Type" />
+                        <TableColumn fx:id="tableStart" prefWidth="118.0" text="Start" />
+                        <TableColumn fx:id="tableEnd" prefWidth="110.0" text="End" />
                         <TableColumn fx:id="tableCID" prefWidth="75.0" text="Customer ID" />
                         <TableColumn fx:id="tableUID" prefWidth="75.0" text="User ID" />
                     </columns>

@@ -163,11 +163,11 @@ public class AppointmentFormController
     } else {apID = 0;};
 
     if(ApptCID.getValue() != null) {
-        apCID = Integer.parseInt((String)ApptCID.getValue());
+        apCID = Integer.parseInt(ApptCID.getValue().toString());
     }else{showAlert("Please check the Customer_ID value");}
 
     if(ApptUID.getValue() != null) {
-        apUID= Integer.parseInt((String)ApptUID.getValue());
+        apUID= Integer.parseInt(ApptUID.getValue().toString());
     }else{showAlert("Please check the User_ID value");}
 
         if(ApptContact.getValue() != null && !((String)ApptContact.getValue()).isEmpty()) {
@@ -221,7 +221,7 @@ public class AppointmentFormController
         }
 
         if(!ApptLocation.getText().isEmpty()){
-            apTitle = ApptLocation.getText();
+            apLocation = ApptLocation.getText();
         } else {
             showAlert("Please check the location value");
             return;
