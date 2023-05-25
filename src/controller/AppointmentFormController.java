@@ -83,6 +83,17 @@ public class AppointmentFormController
 
         if (newAppointment){
             ApptID.setText("Will be auto-generated");
+            ApptID.setText("");
+            ApptTitle.setText("");
+            ApptDesc.setText("");
+            ApptLocation.setText("");
+            ApptType.setValue(null);
+            ApptContact.setValue(null);
+            ApptCID.setValue(null);
+            ApptUID.setValue(null);
+            ApptDate.setValue(null);
+            ApptStart.setValue(null);
+            ApptEnd.setValue(null);
         } else {
             ApptID.setText(passedAppointment.getApID() + "");
             ApptTitle.setText(passedAppointment.getApTitle());
@@ -93,9 +104,9 @@ public class AppointmentFormController
             ApptCID.setValue(passedAppointment.getApCID());
             ApptUID.setValue(passedAppointment.getApUID());
             ApptDate.setValue(passedAppointment.getLocalDateTimeEnd().toLocalDate());
-            ApptStart.setValue(passedAppointment.getLocalDateTimeStart().toLocalTime());
-            ApptEnd.setValue(passedAppointment.getLocalDateTimeEnd().toLocalTime());
-       //work on time into months and an hour drop down, pass in all the combobox values
+            ApptStart.setValue(passedAppointment.getLocalDateTimeStart().toLocalTime().format(DateTimeFormatter.ofPattern("h:mma")));
+            ApptEnd.setValue(passedAppointment.getLocalDateTimeEnd().toLocalTime().format(DateTimeFormatter.ofPattern("h:mma")));
+
         }
         Platform.runLater(new Runnable() {
             @Override
@@ -238,10 +249,14 @@ public class AppointmentFormController
                 localDateTimeEnd,apCID,apUID, apContact);
         if (newAppointment) {
             DatabaseIO.addAppointment(pass);
+            clearValues();
             cancelHandler(actionEvent);
         } else{
             DatabaseIO.updateAppointment(pass);
+            newAppointment = true;
+            clearValues();
             cancelHandler(actionEvent);
+
         }
 
     }
@@ -266,6 +281,20 @@ public class AppointmentFormController
         stage.setScene(new Scene(scene));
         stage.show();
 
+    }
+
+    public void clearValues(){
+            ApptID.setText("Will be auto-generated");
+            ApptTitle.setText("");
+            ApptDesc.setText("");
+            ApptLocation.setText("");
+            ApptType.setValue(null);
+            ApptContact.setValue(null);
+            ApptCID.setValue(null);
+            ApptUID.setValue(null);
+            ApptDate.setValue(null);
+            ApptStart.setValue(null);
+            ApptEnd.setValue(null);
     }
 
 //    public LocalDateTime convertToUTC(LocalDateTime dt){
