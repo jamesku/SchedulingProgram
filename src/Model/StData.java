@@ -12,22 +12,22 @@ public class StData {
         String[] quarterHours = { "00", "15", "30", "45" };
         for (int i = 8; i < 12; i++) {
             for (int j = 0; j < 4; j++) {
-                String t = i + ":" + quarterHours[j] + " AM";
+                String t = i + ":" + quarterHours[j] + "AM";
                 allTimeBoxes.add(t);
             }
         }
-            String t = "12:00 PM";
+            String t = "12:00PM";
             allTimeBoxes.add(t);
-            t = "12:15 PM";
+            t = "12:15PM";
             allTimeBoxes.add(t);
-            t = "12:30 PM";
+            t = "12:30PM";
             allTimeBoxes.add(t);
-            t = "12:45 PM";
+            t = "12:45PM";
             allTimeBoxes.add(t);
 
             for (int k = 1; k < 10; k++) {
                 for (int l = 0; l < 4; l++) {
-                    t = k + ":" + quarterHours[l] + " PM";
+                    t = k + ":" + quarterHours[l] + "PM";
                     allTimeBoxes.add(t);
                 }
             }
@@ -41,26 +41,26 @@ public class StData {
         for (int i = 8; i < 12; i++) {
             for (int j = 0; j < 4; j++) {
                 if(i != 8 && j !=0) {
-                    String t = i + ":" + quarterHours[j] + " AM";
+                    String t = i + ":" + quarterHours[j] + "AM";
                     allTimeBoxes.add(t);
                 }
             }
         }
-        String t = "12:00 PM";
+        String t = "12:00PM";
         allTimeBoxes.add(t);
-        t = "12:15 PM";
+        t = "12:15PM";
         allTimeBoxes.add(t);
-        t = "12:30 PM";
+        t = "12:30PM";
         allTimeBoxes.add(t);
-        t = "12:45 PM";
+        t = "12:45PM";
         allTimeBoxes.add(t);
 
         for (int k = 1; k < 10; k++) {
             for (int l = 0; l < 4; l++) {
-                t = k + ":" + quarterHours[l] + " PM";
+                t = k + ":" + quarterHours[l] + "PM";
                 allTimeBoxes.add(t);
                 if(k == 9 && l == 3){
-                    allTimeBoxes.add("10:00 PM");
+                    allTimeBoxes.add("10:00PM");
                 }
             }
         }

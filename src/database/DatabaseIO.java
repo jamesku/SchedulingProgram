@@ -124,7 +124,7 @@ public abstract class DatabaseIO {
                     "Customer_Name = '" + selectedCustomer.getName()+"',"+
                     "Address = '" + selectedCustomer.getAddress()+"',"+
                     "Phone = '" + selectedCustomer.getPhoneNumber()+"',"+
-                    "Postal_Code = '" + selectedCustomer.getPostalCode()+"',"+
+                    "Postal_Code = " + selectedCustomer.getPostalCode()+","+
                     "Division_ID = " +
                     "(SELECT Division_ID FROM first_level_divisions WHERE Division = '"
                             + selectedCustomer.getDivision()+"') WHERE "+
@@ -139,7 +139,24 @@ public abstract class DatabaseIO {
      * @param newAppointment the new part to be inserted
      * */
     public static void updateAppointment(Appointment newAppointment){
-
+        try {
+            query = "UPDATE appointments SET " +
+                    "Title = '"+ newAppointment.getApTitle()+"', "+
+                    "Description= '" + newAppointment.getApDesc()+"', "+
+                    "Location= '" + newAppointment.getApLocation()+"', "+
+                    "Type= '" + newAppointment.getApType()+"', "+
+                    "Start= '" + Timestamp.valueOf(newAppointment.getLocalDateTimeStart())+"', "+
+                    "End= '" + Timestamp.valueOf(newAppointment.getLocalDateTimeEnd())+"', "+
+                    "User_ID= "+ newAppointment.getApUID()+", "+
+                    "Customer_ID= " + newAppointment.getApCID()+", "+
+                    "Contact_ID =(SELECT Contact_ID FROM contacts WHERE Contact_name = '" +
+                    newAppointment.getApContactName()+"') WHERE Appointment_ID =" +
+                    newAppointment.getApID()+";";
+            PreparedStatement ps = JDBC.connection.prepareStatement(query);
+            int rowsaffected = ps.executeUpdate(query);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
 
 
         }

@@ -258,7 +258,7 @@ public class TopLevelMenu implements Initializable
             stage.setScene(new Scene(root));
             stage.show();
         } else{
-            showAlert("Select a part to modify!");
+            showAlert("Select an appointment to modify!");
         }
     }
 

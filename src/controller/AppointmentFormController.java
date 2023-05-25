@@ -92,6 +92,9 @@ public class AppointmentFormController
             ApptContact.setValue(passedAppointment.getApContactName());
             ApptCID.setValue(passedAppointment.getApCID());
             ApptUID.setValue(passedAppointment.getApUID());
+            ApptDate.setValue(passedAppointment.getLocalDateTimeEnd().toLocalDate());
+            ApptStart.setValue(passedAppointment.getLocalDateTimeStart().toLocalTime());
+            ApptEnd.setValue(passedAppointment.getLocalDateTimeEnd().toLocalTime());
        //work on time into months and an hour drop down, pass in all the combobox values
         }
         Platform.runLater(new Runnable() {
@@ -159,12 +162,12 @@ public class AppointmentFormController
         apID = Integer.parseInt(ApptID.getText());
     } else {apID = 0;};
 
-    if(ApptCID.getValue() != null && !((String)ApptCID.getValue()).isEmpty()) {
-        apCID = Integer.parseInt((String) ApptCID.getValue());
+    if(ApptCID.getValue() != null) {
+        apCID = (int)ApptCID.getValue();
     }else{showAlert("Please check the Customer_ID value");}
 
-    if(ApptUID.getValue() != null && !((String)ApptUID.getValue()).isEmpty()) {
-        apUID= Integer.parseInt((String)ApptUID.getValue());
+    if(ApptUID.getValue() != null) {
+        apUID= (int)ApptUID.getValue();
     }else{showAlert("Please check the User_ID value");}
 
         if(ApptContact.getValue() != null && !((String)ApptContact.getValue()).isEmpty()) {
@@ -178,10 +181,10 @@ public class AppointmentFormController
             return;
         }
 
-    if(ApptStart.getValue() != null && !((String)ApptStart.getValue()).isEmpty()){
+    if(ApptStart.getValue() != null){
         String s = ApptStart.getValue().toString();
         if(s.length() <7){ s = "0"+s;}
-        apStart = LocalTime.parse(s, DateTimeFormatter.ofPattern("hh:mm a", Locale.getDefault()));
+        apStart = LocalTime.parse(s, DateTimeFormatter.ofPattern("hh:mma", Locale.getDefault()));
 //        apStart = LocalTime.parse(s+":00");
 //        apStart = convertToUTC(apStart);
         } else {
@@ -189,10 +192,10 @@ public class AppointmentFormController
             return;
         }
 
-    if(ApptEnd.getValue() != null && !((String)ApptEnd.getValue()).isEmpty()){
+    if(ApptEnd.getValue() != null){
         String t = ApptEnd.getValue().toString();
         if(t.length() <7){ t = "0"+t;}
-        apEnd = LocalTime.parse(t, DateTimeFormatter.ofPattern("hh:mm a", Locale.getDefault()));
+        apEnd = LocalTime.parse(t, DateTimeFormatter.ofPattern("hh:mma", Locale.getDefault()));
 //            apEnd = convertToUTC(apEnd);
         } else {
             showAlert("Please check the end time");
