@@ -83,17 +83,6 @@ public class AppointmentFormController
 
         if (newAppointment){
             ApptID.setText("Will be auto-generated");
-            ApptID.setText("");
-            ApptTitle.setText("");
-            ApptDesc.setText("");
-            ApptLocation.setText("");
-            ApptType.setValue(null);
-            ApptContact.setValue(null);
-            ApptCID.setValue(null);
-            ApptUID.setValue(null);
-            ApptDate.setValue(null);
-            ApptStart.setValue(null);
-            ApptEnd.setValue(null);
         } else {
             ApptID.setText(passedAppointment.getApID() + "");
             ApptTitle.setText(passedAppointment.getApTitle());
@@ -174,11 +163,11 @@ public class AppointmentFormController
     } else {apID = 0;};
 
     if(ApptCID.getValue() != null) {
-        apCID = (int)ApptCID.getValue();
+        apCID = Integer.parseInt((String)ApptCID.getValue());
     }else{showAlert("Please check the Customer_ID value");}
 
     if(ApptUID.getValue() != null) {
-        apUID= (int)ApptUID.getValue();
+        apUID= Integer.parseInt((String)ApptUID.getValue());
     }else{showAlert("Please check the User_ID value");}
 
         if(ApptContact.getValue() != null && !((String)ApptContact.getValue()).isEmpty()) {
@@ -249,12 +238,9 @@ public class AppointmentFormController
                 localDateTimeEnd,apCID,apUID, apContact);
         if (newAppointment) {
             DatabaseIO.addAppointment(pass);
-            clearValues();
             cancelHandler(actionEvent);
         } else{
             DatabaseIO.updateAppointment(pass);
-            newAppointment = true;
-            clearValues();
             cancelHandler(actionEvent);
 
         }
@@ -276,6 +262,8 @@ public class AppointmentFormController
      * @throws IOException IOexception*/
     @Deprecated
     public void cancelHandler(ActionEvent actionEvent) throws IOException {
+        newAppointment = true;
+        clearValues();
         stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(getClass().getResource("/View/TopLevelMenu.fxml"));
         stage.setScene(new Scene(scene));

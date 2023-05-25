@@ -122,6 +122,8 @@ public class CustomerFormController
      * @throws IOException IOexception*/
     @Deprecated
     public void cancelHandler(ActionEvent actionEvent) throws IOException {
+        newCustomer=true;
+        clearValues();
         stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(getClass().getResource("/View/TopLevelMenu.fxml"));
         stage.setScene(new Scene(scene));
@@ -212,5 +214,13 @@ public class CustomerFormController
         alert.showAndWait();
     }
 
-
+public void clearValues(){
+    customerID.setText("");
+    customerName.setText("");
+    customerAddress.setText("");
+    customerPC.setText("");
+    customerPhone.setText("");
+    comboCountry.setValue(null);
+    comboDivision.setValue(null);
+}
 }
