@@ -28,6 +28,7 @@
                 <Button layoutX="241.0" layoutY="8.0" mnemonicParsing="false" onAction="#deleteCustomerButtonAction" text="Delete" />
                 <Button layoutX="719.0" layoutY="8.0" mnemonicParsing="false" onAction="#logoutHandler" text="Logout" />
                 <Button layoutX="808.0" layoutY="8.0" mnemonicParsing="false" onAction="#exitHandler" text="Exit" />
+            <Button layoutX="310.0" layoutY="8.0" mnemonicParsing="false" onAction="#allCustomersAction" text="All Customers" />
             </children>
         </AnchorPane>
         <AnchorPane layoutX="7.0" layoutY="273.0" prefHeight="228.0" prefWidth="884.0" style="-fx-border-color: black; -fx-border-radius: 9;">
@@ -54,6 +55,12 @@
                 <Button layoutX="117.0" layoutY="10.0" mnemonicParsing="false" onAction="#addAppointmentButtonAction" text="Add" />
                 <Button layoutX="171.0" layoutY="10.0" mnemonicParsing="false" onAction="#modifyAppointmentButtonAction" text="Modify" />
                 <Button layoutX="241.0" layoutY="10.0" mnemonicParsing="false" onAction="#deleteAppointmentButtonAction" text="Delete" />
+            <RadioButton layoutX="637.0" layoutY="14.0" mnemonicParsing="false" onAction="#seeMonthAppointments" selected="true" text="Month">
+               <toggleGroup>
+                  <ToggleGroup fx:id="tGroup" />
+               </toggleGroup></RadioButton>
+            <RadioButton layoutX="703.0" layoutY="14.0" mnemonicParsing="false" onAction="#seeWeekAppointments" selected="true" text="Week" toggleGroup="$tGroup" />
+            <RadioButton layoutX="587.0" layoutY="14.0" mnemonicParsing="false" onAction="#seeAllAppointments" selected="true" text="All" toggleGroup="$tGroup" />
             </children>
         </AnchorPane>
         <Label layoutX="362.0" layoutY="5.0" text="Schedule Management System">

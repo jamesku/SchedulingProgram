@@ -4,12 +4,14 @@ import model.Customer;
 import model.Appointment;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import model.UtcConversion;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -55,8 +57,10 @@ public abstract class DatabaseIO {
                     "'"+ newAppointment.getApDesc()+"', "+
                     "'"+ newAppointment.getApLocation()+"', "+
                     "'"+ newAppointment.getApType()+"', "+
-                    "'"+ Timestamp.valueOf(newAppointment.getLocalDateTimeStart())+"', "+
-                    "'"+ Timestamp.valueOf(newAppointment.getLocalDateTimeEnd())+"', "+
+                    "'"+ UtcConversion.convertLocalToUTC((newAppointment.getLocalDateTimeStart()))+"', "+
+                    "'"+ UtcConversion.convertLocalToUTC((newAppointment.getLocalDateTimeEnd()))+"', "+
+//                    "'"+ newAppointment.getLocalDateTimeStart()+"', "+
+//                    "'"+ newAppointment.getLocalDateTimeEnd()+"', "+
                     ""+ newAppointment.getApUID()+", "+
                     "'"+ newAppointment.getApCID()+"', "+
                     "(SELECT Contact_ID FROM contacts WHERE Contact_name = '"
@@ -145,8 +149,11 @@ public abstract class DatabaseIO {
                     "Description= '" + newAppointment.getApDesc()+"', "+
                     "Location= '" + newAppointment.getApLocation()+"', "+
                     "Type= '" + newAppointment.getApType()+"', "+
-                    "Start= '" + Timestamp.valueOf(newAppointment.getLocalDateTimeStart())+"', "+
-                    "End= '" + Timestamp.valueOf(newAppointment.getLocalDateTimeEnd())+"', "+
+                    "Start= '" + UtcConversion.convertLocalToUTC(newAppointment.getLocalDateTimeStart())+"', "+
+//                    "Start= '" + Timestamp.valueOf(newAppointment.getLocalDateTimeStart().atZone(ZoneId.systemDefault()))+"', "+
+//                    "End= '" + Timestamp.valueOf(newAppointment.getLocalDateTimeEnd())+"', "+
+//                    "Start= '" + newAppointment.getLocalDateTimeStart()+"', "+
+                    "End= '" + UtcConversion.convertLocalToUTC(newAppointment.getLocalDateTimeEnd())+"', "+
                     "User_ID= "+ newAppointment.getApUID()+", "+
                     "Customer_ID= " + newAppointment.getApCID()+", "+
                     "Contact_ID =(SELECT Contact_ID FROM contacts WHERE Contact_name = '" +
@@ -190,14 +197,18 @@ public abstract class DatabaseIO {
 
 //            LocalDateTime localDate = LocalDateTime.parse(strLocalDate, formatter);
             while(rs.next()) {
-                String start = rs.getTimestamp("Start").toLocalDateTime().toString();
-                String end = rs.getTimestamp("End").toLocalDateTime().toString();
+                String start = rs.getTimestamp("Start").toString();
+                String end = rs.getObject("End").toString();
                 selectAppointments.add(new Appointment(rs.getInt("Appointment_ID"),
                         rs.getString("Title"),
                         rs.getString("Description"), rs.getString("Location"),
                         rs.getString("Type"),
-                        rs.getTimestamp("Start").toLocalDateTime(),
-                        rs.getTimestamp("End").toLocalDateTime(),
+                        UtcConversion.convertUTCtoLocal((LocalDateTime) rs.getObject("Start")),
+//                        rs.getTimestamp("Start").toLocalDateTime(),
+//                        rs.getTimestamp("End").toLocalDateTime(),
+//                        (LocalDateTime) rs.getObject("Start"),
+                        UtcConversion.convertUTCtoLocal((LocalDateTime) rs.getObject("End")),
+//                        (LocalDateTime) rs.getObject("End"),
                         rs.getInt("Customer_ID"),
                         rs.getInt("User_ID"),
                         rs.getString("Contact_Name")));
@@ -211,12 +222,19 @@ public abstract class DatabaseIO {
 
 
     /**This deletes a product from the ObservableList.
-     * @param selectedAppointment The product to delete.
+     * @param apptID The ID of the appointment to delete.
      * @return A boolean about if the product is deleted.*/
-    public static boolean deleteAppointment(Appointment selectedAppointment){
-//        boolean remove = allProducts.remove(selectedProduct);
-//        return remove;
-        return true;
+    public static boolean deleteAppointment(int apptID){
+        try {
+            query = "DELETE FROM appointments Where Appointment_ID = '"
+                    + apptID+"';";
+            PreparedStatement ps = JDBC.connection.prepareStatement(query);
+            int rowsaffected = ps.executeUpdate(query);
+            return true;
+        } catch (Exception e) {
+            System.out.println(e);
+            return false;
+        }
     }
 /**This returns the complete list of customers.
  * @return allCustomers The complete list of customers.*/

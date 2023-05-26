@@ -88,6 +88,7 @@ public class TopLevelMenu implements Initializable
         tableCountry.setCellValueFactory(new PropertyValueFactory<>("country"));
         tableDivision.setCellValueFactory(new PropertyValueFactory<>("division"));
 
+
         tableApptID.setCellValueFactory(new PropertyValueFactory<>("apID"));
         tableTitle.setCellValueFactory(new PropertyValueFactory<>("apTitle"));
         tableDescription.setCellValueFactory(new PropertyValueFactory<>("apDesc"));
@@ -270,7 +271,7 @@ public class TopLevelMenu implements Initializable
             Appointment p = (Appointment) appointmentsTable.getSelectionModel().getSelectedItem();
             int tempApID = p.getApID();
             String tempApType = p.getApType();
-            if (!DatabaseIO.deleteAppointment(p)) {
+            if (!DatabaseIO.deleteAppointment(tempApID)) {
                 showAlert("Part not deleted");
             } else {
                 selectedCustomerHandler();
