@@ -149,7 +149,7 @@ public class TopLevelMenu implements Initializable
     }
 
     /**This function is called from another class to pass a particular piece of data.  Here is takes in
-     * a Part object and sets the local variable.
+     * a userID and sets the local variable.
      * @param uid The Part passed from another class.*/
     public static void receiveData(int uid){
         currentUserID = uid;

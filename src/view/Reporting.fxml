@@ -4,34 +4,37 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="mainAP" prefHeight="521.0" prefWidth="929.0" style="-fx-background-color: light grey; -fx-border-width: 3; -fx-border-color: blue;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TopLevelMenu">
+<AnchorPane fx:id="mainAP" prefHeight="521.0" prefWidth="929.0" style="-fx-background-color: light grey; -fx-border-width: 3; -fx-border-color: blue;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ReportingFormController">
     <children>
-        <AnchorPane layoutX="7.0" layoutY="23.0" prefHeight="218.0" prefWidth="884.0" style="-fx-border-color: black; -fx-border-radius: 9;">
+        <AnchorPane layoutX="7.0" layoutY="51.0" prefHeight="79.0" prefWidth="884.0" style="-fx-border-color: black; -fx-border-radius: 9;">
             <children>
-                <Label layoutX="14.0" layoutY="12.0" text="Customers">
+                <Label layoutX="14.0" layoutY="12.0" text="Total number of appointments by type and month:">
                     <font>
                         <Font name="System Bold" size="12.0" />
                     </font></Label>
-                <TableView fx:id="customersTable" layoutX="9.0" layoutY="45.0" prefHeight="162.0" prefWidth="859.0">
-                    <columns>
-                        <TableColumn fx:id="tableCustomerID" editable="false" prefWidth="120.33333396911621" text="Customer ID" />
-                        <TableColumn fx:id="tableCustomerName" editable="false" prefWidth="178.33334350585938" sortable="false" text="Customer Name" />
-                        <TableColumn fx:id="tableAddress" editable="false" prefWidth="164.33334350585938" sortable="false" text="Address" />
-                        <TableColumn fx:id="tablePostalCode" prefWidth="88.66665649414062" sortable="false" text="Postal Code" />
-                        <TableColumn fx:id="tablePhone" prefWidth="106.6666259765625" text="Phone" />
-                        <TableColumn fx:id="tableDivision" prefWidth="96.33331298828125" text="Division" />
-                        <TableColumn fx:id="tableCountry" minWidth="0.0" prefWidth="104.66668701171875" text="Country" />
-                    </columns>
-                </TableView>
-                <Button layoutX="117.0" layoutY="8.0" mnemonicParsing="false" onAction="#addCustomerButtonAction" text="Add" />
-                <Button layoutX="171.0" layoutY="8.0" mnemonicParsing="false" onAction="#modifyCustomerButtonAction" text="Modify" />
-                <Button layoutX="241.0" layoutY="8.0" mnemonicParsing="false" onAction="#deleteCustomerButtonAction" text="Delete" />
-                <Button layoutX="719.0" layoutY="8.0" mnemonicParsing="false" onAction="#logoutHandler" text="Logout" />
-                <Button layoutX="808.0" layoutY="8.0" mnemonicParsing="false" onAction="#exitHandler" text="Exit" />
-            <Button layoutX="310.0" layoutY="8.0" mnemonicParsing="false" onAction="#allCustomersAction" text="All Customers" />
+                <ComboBox fx:id="comboType" layoutX="134.0" layoutY="40.0" onAction="#handleComboType" prefWidth="150.0" />
+                <ComboBox fx:id="comboMonth" layoutX="388.0" layoutY="40.0" onAction="#handleComboMonth" prefWidth="150.0" />
+                <TextField fx:id="typeMonthTotal" editable="false" layoutX="634.0" layoutY="40.0" />
+                <Label layoutX="77.0" layoutY="44.0" text="Type:" />
+                <Label layoutX="320.0" layoutY="44.0" text="Month:" />
+                <Label layoutX="576.0" layoutY="44.0" text="Total:" />
             </children>
         </AnchorPane>
-        <AnchorPane layoutX="7.0" layoutY="273.0" prefHeight="228.0" prefWidth="884.0" style="-fx-border-color: black; -fx-border-radius: 9;">
+        <AnchorPane layoutX="7.0" layoutY="153.0" prefHeight="79.0" prefWidth="884.0" style="-fx-border-color: black; -fx-border-radius: 9;">
+            <children>
+                <Label layoutX="14.0" layoutY="12.0" text="Total number of customers by country and first level division:">
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font></Label>
+                <Label layoutX="75.0" layoutY="40.0" text="Country:" />
+                <Label layoutX="320.0" layoutY="40.0" text="Division:" />
+                <ComboBox fx:id="comboCountry" layoutX="133.0" layoutY="36.0" prefWidth="150.0" />
+                <ComboBox fx:id="comboDivision" layoutX="389.0" layoutY="36.0" prefWidth="150.0" />
+                <TextField fx:id="countryDivisionTotal" editable="false" layoutX="636.0" layoutY="36.0" />
+                <Label layoutX="574.0" layoutY="40.0" text="Total:" />
+            </children>
+        </AnchorPane>
+        <AnchorPane layoutX="7.0" layoutY="258.0" prefHeight="228.0" prefWidth="884.0" style="-fx-border-color: black; -fx-border-radius: 9;">
             <children>
                 <Label layoutX="14.0" layoutY="14.0" text="Appointments">
                     <font>
@@ -52,21 +55,15 @@
                         <TableColumn fx:id="tableUID" prefWidth="75.0" text="User ID" />
                     </columns>
                 </TableView>
-                <Button layoutX="117.0" layoutY="10.0" mnemonicParsing="false" onAction="#addAppointmentButtonAction" text="Add" />
-                <Button layoutX="171.0" layoutY="10.0" mnemonicParsing="false" onAction="#modifyAppointmentButtonAction" text="Modify" />
-                <Button layoutX="241.0" layoutY="10.0" mnemonicParsing="false" onAction="#deleteAppointmentButtonAction" text="Delete" />
-            <RadioButton layoutX="637.0" layoutY="14.0" mnemonicParsing="false" onAction="#seeMonthAppointments" selected="true" text="Month">
-               <toggleGroup>
-                  <ToggleGroup fx:id="tGroup" />
-               </toggleGroup></RadioButton>
-            <RadioButton layoutX="703.0" layoutY="14.0" mnemonicParsing="false" onAction="#seeWeekAppointments" selected="true" text="Week" toggleGroup="$tGroup" />
-            <RadioButton fx:id="allRadioButton" layoutX="587.0" layoutY="14.0" mnemonicParsing="false" onAction="#seeAllAppointments" selected="true" text="All" toggleGroup="$tGroup" />
+                <ComboBox fx:id="comboContact" layoutX="167.0" layoutY="10.0" onAction="#handleComboContact" prefWidth="150.0" />
+                <Label layoutX="113.0" layoutY="14.0" text="Contact:" />
             </children>
         </AnchorPane>
-        <Label layoutX="362.0" layoutY="5.0" text="Schedule Management System">
+        <Label layoutX="421.0" layoutY="18.0" text="Reporting">
             <font>
                 <Font name="System Bold" size="12.0" />
             </font>
         </Label>
+        <Button layoutX="812.0" layoutY="14.0" mnemonicParsing="false" onAction="#exitHandler" text="Back" />
     </children>
 </AnchorPane>
