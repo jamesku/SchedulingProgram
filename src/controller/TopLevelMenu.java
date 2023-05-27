@@ -1,6 +1,8 @@
 package controller;
 
 import database.DatabaseIO;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import model.Appointment;
 import model.Customer;
 import javafx.application.Platform;
@@ -19,6 +21,7 @@ import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -72,6 +75,12 @@ public class TopLevelMenu implements Initializable
     private TableColumn tableCID;
     @javafx.fxml.FXML
     private TableColumn tableUID;
+    @javafx.fxml.FXML
+    private ToggleGroup tGroup;
+    @javafx.fxml.FXML
+    private RadioButton allRadioButton;
+
+    static int indexSelected;
 
 
     /**This function sets up the initial values.  It brings in all the parts and products in the system
@@ -105,6 +114,8 @@ public class TopLevelMenu implements Initializable
                 selectedCustomerHandler();
             }
         });
+
+        customersTable.getSelectionModel().selectIndices(indexSelected);
         Platform.runLater(new Runnable() {
             @Override public void run() {
                 setListener();
@@ -141,6 +152,7 @@ public class TopLevelMenu implements Initializable
     }
 
     public void selectedCustomerHandler(){
+        allRadioButton.setSelected(true);
         Customer selectedCustomer = (Customer) customersTable.getSelectionModel().getSelectedItem();
         appointmentsTable.setItems(DatabaseIO.getSelectAppointments(selectedCustomer.getCustID()));
     }
@@ -227,6 +239,7 @@ public class TopLevelMenu implements Initializable
      * @param actionEvent the button being pressed
      * @throws IOException IOException*/
     public void addAppointmentButtonAction(ActionEvent actionEvent) throws IOException {
+        indexSelected = customersTable.getSelectionModel().getSelectedIndex();
         stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(getClass().getResource("/View/AppointmentForm.fxml"));
         stage.setScene(new Scene(scene));
@@ -250,6 +263,7 @@ public class TopLevelMenu implements Initializable
      * @throws IOException IOException*/
     public void modifyAppointmentButtonAction(ActionEvent actionEvent) throws IOException {
         //had to include a check to make sure something was selected
+        indexSelected = customersTable.getSelectionModel().getSelectedIndex();
         if(appointmentsTable.getSelectionModel().getSelectedItem() != null) {
             Appointment passedAppointment = (Appointment) appointmentsTable.getSelectionModel().getSelectedItem();
             AppointmentFormController.receiveData(passedAppointment);
@@ -267,6 +281,7 @@ public class TopLevelMenu implements Initializable
      * confirm the user activity.  Additionally, if no part is deleted, it alerts the user.
      * @param actionEvent the button being pressed*/
     public void deleteAppointmentButtonAction(ActionEvent actionEvent) {
+        indexSelected = customersTable.getSelectionModel().getSelectedIndex();
         if(confirmationAlert("Are you sure you want to delete that Appointment?")) {
             Appointment p = (Appointment) appointmentsTable.getSelectionModel().getSelectedItem();
             int tempApID = p.getApID();
@@ -274,6 +289,9 @@ public class TopLevelMenu implements Initializable
             if (!DatabaseIO.deleteAppointment(tempApID)) {
                 showAlert("Part not deleted");
             } else {
+                if(customersTable.getSelectionModel().getSelectedItem() == null) {
+                    appointmentsTable.setItems(DatabaseIO.getAllAppointments());
+                }
                 selectedCustomerHandler();
                 showAlert("Appointment "+tempApID+", type: "+tempApType+" deleted.");
             }
@@ -294,6 +312,7 @@ public class TopLevelMenu implements Initializable
      * @param actionEvent the button being pressed
      * @throws IOException IOException*/
     public void modifyCustomerButtonAction(ActionEvent actionEvent) throws IOException {
+        indexSelected = customersTable.getSelectionModel().getSelectedIndex();
         if(customersTable.getSelectionModel().getSelectedItem() != null) {
             Customer passCustomer = (Customer) customersTable.getSelectionModel().getSelectedItem();
             CustomerFormController.receiveData(passCustomer);
@@ -321,10 +340,84 @@ public class TopLevelMenu implements Initializable
             customersTable.setItems(DatabaseIO.getAllCustomers());
         }
     }
+
+//    /**This function is called from another class to pass a particular piece of data.  Here is takes in
+//     * a Part object and sets the local variable.
+//     * @param p The Part passed from another class.*/
+//    public static void receiveData(int indexPassed){
+//        indexSelected = indexPassed;
+//    }
+
     /**this function close the program when called.  The user must confirm the exit.
      * @param actionEvent the event*/
     public void exitHandler(ActionEvent actionEvent) {
         if(confirmationAlert("Are you sure you want to exit?")){
             Platform.exit();}
+    }
+
+    public void allCustomersAction(ActionEvent actionEvent){
+        allRadioButton.setSelected(true);
+        customersTable.getSelectionModel().clearSelection();
+        appointmentsTable.setItems(DatabaseIO.getAllAppointments());
+    }
+
+    public void seeAllAppointments(ActionEvent actionEvent){
+        if(customersTable.getSelectionModel().getSelectedItem() == null) {
+            appointmentsTable.setItems(DatabaseIO.getAllAppointments());
+        } else{
+            selectedCustomerHandler();
+        }
+
+    }
+    public void seeMonthAppointments(ActionEvent actionEvent){
+        if(customersTable.getSelectionModel().getSelectedItem() == null) {
+            ObservableList<Appointment> tempList = DatabaseIO.getAllAppointments();
+            ObservableList<Appointment> newList = FXCollections.observableArrayList();
+            for (Appointment a : tempList){
+//                LocalDateTime temp = a.getLocalDateTimeStart();
+//                LocalDateTime onemonthfromnow = LocalDateTime.now().plusMonths(1);
+//                boolean check = a.getLocalDateTimeEnd().isAfter(LocalDateTime.now().plusMonths(1));
+                if(a.getLocalDateTimeEnd().isBefore(LocalDateTime.now().plusMonths(1))){
+                    newList.add(a);
+                }
+            }
+            appointmentsTable.setItems(newList);
+        } else{
+            Customer selectedCustomer = (Customer) customersTable.getSelectionModel().getSelectedItem();
+            appointmentsTable.setItems(DatabaseIO.getSelectAppointments(selectedCustomer.getCustID()));
+            ObservableList<Appointment> tempList = appointmentsTable.getItems();
+            ObservableList<Appointment> newList = FXCollections.observableArrayList();
+            for (Appointment a : tempList){
+                if(a.getLocalDateTimeEnd().isBefore(LocalDateTime.now().plusMonths(1))){
+                    newList.add(a);
+                }
+            }
+            appointmentsTable.setItems(newList);
+        }
+
+    }
+
+    public void seeWeekAppointments(ActionEvent actionEvent){
+        if(customersTable.getSelectionModel().getSelectedItem() == null) {
+            ObservableList<Appointment> tempList = DatabaseIO.getAllAppointments();
+            ObservableList<Appointment> newList = FXCollections.observableArrayList();
+            for (Appointment a : tempList){
+                if(a.getLocalDateTimeEnd().isBefore(LocalDateTime.now().plusDays(7))){
+                    newList.add(a);
+                }
+            }
+            appointmentsTable.setItems(newList);
+        } else{
+            Customer selectedCustomer = (Customer) customersTable.getSelectionModel().getSelectedItem();
+            appointmentsTable.setItems(DatabaseIO.getSelectAppointments(selectedCustomer.getCustID()));
+            ObservableList<Appointment> tempList = appointmentsTable.getItems();
+            ObservableList<Appointment> newList = FXCollections.observableArrayList();
+            for (Appointment a : tempList){
+                if(a.getLocalDateTimeEnd().isBefore(LocalDateTime.now().plusDays(7))){
+                    newList.add(a);
+                }
+            }
+            appointmentsTable.setItems(newList);
+        }
     }
 }

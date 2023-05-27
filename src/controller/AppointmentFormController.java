@@ -78,8 +78,8 @@ public class AppointmentFormController
         ApptContact.setItems(DatabaseIO.getContactCombo());
 
         ApptType.setItems(StData.getAvailableTypes());
-        ApptStart.setItems(StData.getTimeBoxesStart());
-        ApptEnd.setItems(StData.getTimeBoxesEnd());
+        ApptStart.setItems(StData.getTimeBoxes());
+        ApptEnd.setItems(StData.getTimeBoxes());
 
         if (newAppointment){
             ApptID.setText("Will be auto-generated");
@@ -134,6 +134,7 @@ public class AppointmentFormController
         newAppointment = false;
     }
 
+
     /**This is the save function for a modified part.  First it finds the index of where the modified
      * part occurs in the ObservableList of all parts.  Then it checks if the min/max and inventory
      * values are appropriate and returns an alert if not. It then checks if the part is outsourced
@@ -181,16 +182,19 @@ public class AppointmentFormController
             return;
         }
 
-    if(ApptStart.getValue() != null){
+    if(ApptStart.getValue() != null) {
+
         String s = ApptStart.getValue().toString();
-        if(s.length() <7){ s = "0"+s;}
+        if (s.length() < 7) {
+            s = "0" + s;
+        }
         apStart = LocalTime.parse(s, DateTimeFormatter.ofPattern("hh:mma", Locale.getDefault()));
-//        apStart = LocalTime.parse(s+":00");
-//        apStart = convertToUTC(apStart);
-        } else {
-            showAlert("Please check the start time");
+        }
+        else {
+            showAlert("Appointment time is outside business hours!");
             return;
         }
+
 
     if(ApptEnd.getValue() != null){
         String t = ApptEnd.getValue().toString();
@@ -203,7 +207,17 @@ public class AppointmentFormController
         }
         LocalDateTime localDateTimeStart = apDate.atTime(apStart);
         LocalDateTime localDateTimeEnd = apDate.atTime(apEnd);
-//        ZonedDateTime zonedDateTimeStart = ZonedDateTime.of(localDateTimeStart, ZoneId.systemDefault());
+
+        if(!(checkHours(localDateTimeEnd) && checkHours(localDateTimeStart))){
+            showAlert("Appointment time is outside business hours!");
+            return;
+        }
+
+        if(localDateTimeStart.isAfter(localDateTimeEnd)){
+            showAlert("Please check appointment times");
+            return;
+        }
+
 //        ZonedDateTime zonedDateTimeEnd = ZonedDateTime.of(localDateTimeEnd, ZoneId.systemDefault());
 
     if(!ApptTitle.getText().isEmpty()){
@@ -284,6 +298,21 @@ public class AppointmentFormController
             ApptStart.setValue(null);
             ApptEnd.setValue(null);
     }
+
+    public boolean checkHours(LocalDateTime dt){
+        ZonedDateTime zonedDT = ZonedDateTime.of(dt, ZoneId.systemDefault());
+        ZonedDateTime estdt = zonedDT.withZoneSameInstant(ZoneId.of("America/New_York"));
+        if (estdt.getHour() > 22 || (estdt.getHour() == 22 && estdt.getMinute()>0)){
+            return false;
+        }
+        if (estdt.getHour() < 8){
+            return false;
+        }
+        return true;
+    }
+
+
+
 
 //    public LocalDateTime convertToUTC(LocalDateTime dt){
 //        ZonedDateTime zdt = dt.atZone(ZoneId.systemDefault());

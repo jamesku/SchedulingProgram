@@ -60,7 +60,7 @@
                   <ToggleGroup fx:id="tGroup" />
                </toggleGroup></RadioButton>
             <RadioButton layoutX="703.0" layoutY="14.0" mnemonicParsing="false" onAction="#seeWeekAppointments" selected="true" text="Week" toggleGroup="$tGroup" />
-            <RadioButton layoutX="587.0" layoutY="14.0" mnemonicParsing="false" onAction="#seeAllAppointments" selected="true" text="All" toggleGroup="$tGroup" />
+            <RadioButton fx:id="allRadioButton" layoutX="587.0" layoutY="14.0" mnemonicParsing="false" onAction="#seeAllAppointments" selected="true" text="All" toggleGroup="$tGroup" />
             </children>
         </AnchorPane>
         <Label layoutX="362.0" layoutY="5.0" text="Schedule Management System">

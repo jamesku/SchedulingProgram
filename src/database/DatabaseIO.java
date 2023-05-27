@@ -220,6 +220,42 @@ public abstract class DatabaseIO {
         }
     }
 
+    /**This returns the complete list of customers.
+     * @return allCustomers The complete list of customers.*/
+    public static ObservableList<Appointment> getAllAppointments(){
+        ObservableList<Appointment> selectAppointments = FXCollections.observableArrayList();
+        try {
+            query = "SELECT Appointment_ID, Title, Description, Location, Type, Start, End, " +
+                    "Customer_ID, User_ID, Contact_Name "+
+                    "FROM appointments JOIN contacts ON appointments.Contact_ID = contacts.Contact_ID;";
+            PreparedStatement ps = JDBC.connection.prepareStatement(query);
+            ResultSet rs = ps.executeQuery(query);
+
+//            LocalDateTime localDate = LocalDateTime.parse(strLocalDate, formatter);
+            while(rs.next()) {
+                String start = rs.getTimestamp("Start").toString();
+                String end = rs.getObject("End").toString();
+                selectAppointments.add(new Appointment(rs.getInt("Appointment_ID"),
+                        rs.getString("Title"),
+                        rs.getString("Description"), rs.getString("Location"),
+                        rs.getString("Type"),
+                        UtcConversion.convertUTCtoLocal((LocalDateTime) rs.getObject("Start")),
+//                        rs.getTimestamp("Start").toLocalDateTime(),
+//                        rs.getTimestamp("End").toLocalDateTime(),
+//                        (LocalDateTime) rs.getObject("Start"),
+                        UtcConversion.convertUTCtoLocal((LocalDateTime) rs.getObject("End")),
+//                        (LocalDateTime) rs.getObject("End"),
+                        rs.getInt("Customer_ID"),
+                        rs.getInt("User_ID"),
+                        rs.getString("Contact_Name")));
+            }
+            return selectAppointments;
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
 
     /**This deletes a product from the ObservableList.
      * @param apptID The ID of the appointment to delete.
