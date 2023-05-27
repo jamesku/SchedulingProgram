@@ -56,8 +56,10 @@ public class FirstScreenController implements Initializable {
     }
     @javafx.fxml.FXML
     public void submitLogin(ActionEvent actionEvent) throws IOException, SQLException {
-//        if(DatabaseIO.checkLogin(loginUserName.getText(), loginPassword.getText())){
-            if(true){
+            int uid = DatabaseIO.checkLogin(loginUserName.getText(), loginPassword.getText());
+        if(uid>0){
+//            if(true){
+                TopLevelMenu.receiveData(uid);
             Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/TopLevelMenu.fxml"));
             Parent root = loader.load();

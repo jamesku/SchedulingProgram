@@ -18,10 +18,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import model.UtcConversion;
 
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -81,6 +83,7 @@ public class TopLevelMenu implements Initializable
     private RadioButton allRadioButton;
 
     static int indexSelected;
+    static int currentUserID;
 
 
     /**This function sets up the initial values.  It brings in all the parts and products in the system
@@ -97,7 +100,6 @@ public class TopLevelMenu implements Initializable
         tableCountry.setCellValueFactory(new PropertyValueFactory<>("country"));
         tableDivision.setCellValueFactory(new PropertyValueFactory<>("division"));
 
-
         tableApptID.setCellValueFactory(new PropertyValueFactory<>("apID"));
         tableTitle.setCellValueFactory(new PropertyValueFactory<>("apTitle"));
         tableDescription.setCellValueFactory(new PropertyValueFactory<>("apDesc"));
@@ -108,6 +110,8 @@ public class TopLevelMenu implements Initializable
         tableEnd.setCellValueFactory(new PropertyValueFactory<>("localDateTimeEnd"));
         tableCID.setCellValueFactory(new PropertyValueFactory<>("apCID"));
         tableUID.setCellValueFactory(new PropertyValueFactory<>("apUID"));
+
+        checkFifteenMinutes(currentUserID);
 
         customersTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
@@ -139,6 +143,29 @@ public class TopLevelMenu implements Initializable
                 System.exit(0);
             }
         });
+    }
+
+    /**This function is called from another class to pass a particular piece of data.  Here is takes in
+     * a Part object and sets the local variable.
+     * @param uid The Part passed from another class.*/
+    public static void receiveData(int uid){
+        currentUserID = uid;
+    }
+
+    /**provide an alert when there is an appointment within 15 minutes of the user’s log-in.
+     * A custom message should be displayed in the user interface and include the appointment ID, date,
+     * and time. If the user does not have any appointments within 15 minutes of logging in,
+     * display a custom message in the user interface indicating there are no upcoming appointments.*/
+    public void checkFifteenMinutes(int uid){
+        LocalDateTime nowDT = LocalDateTime.now();
+        ObservableList<Appointment> tempList = DatabaseIO.getAllAppointments();
+        for (Appointment a : tempList){
+            if (a.getLocalDateTimeStart().isBefore(nowDT.plusMinutes(15))){
+                String alertText = "Appointment "+a.getApID()+ "at "+a.getLocalDateTimeStart() +
+                        " is begining in the next 15 minutes";
+                showAlert(alertText);
+            }
+        }
     }
 
     /**This method shows an alert based on the passed string text.
@@ -287,7 +314,7 @@ public class TopLevelMenu implements Initializable
             int tempApID = p.getApID();
             String tempApType = p.getApType();
             if (!DatabaseIO.deleteAppointment(tempApID)) {
-                showAlert("Part not deleted");
+                showAlert("Appointment not deleted");
             } else {
                 if(customersTable.getSelectionModel().getSelectedItem() == null) {
                     appointmentsTable.setItems(DatabaseIO.getAllAppointments());

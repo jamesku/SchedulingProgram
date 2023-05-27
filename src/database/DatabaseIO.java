@@ -183,8 +183,44 @@ public abstract class DatabaseIO {
         }
     }
 
-    /**This returns the complete list of customers.
-     * @return allCustomers The complete list of customers.*/
+
+//    /**This returns the select list of appointments.
+//     * @return selectAppointments The list of select appointments.*/
+//    public static ObservableList<Appointment> checkFifteenMinutes(int userID){
+//        LocalDateTime utcNow = UtcConversion.convertLocalToUTC(LocalDateTime.now());
+//        ObservableList<Appointment> selectAppointments = FXCollections.observableArrayList();
+//        try {
+//            query = "SELECT Appointment_ID, Title, Description, Location, Type, Start, End, " +
+//                    "Customer_ID, User_ID, Contact_Name "+
+//                    "FROM appointments JOIN contacts ON appointments.Contact_ID = contacts.Contact_ID "+
+//                    "WHERE User_ID = "+userID+ " & WHERE Start;";
+//            PreparedStatement ps = JDBC.connection.prepareStatement(query);
+//            ResultSet rs = ps.executeQuery(query);
+//
+//            while(rs.next()) {
+//                String start = rs.getTimestamp("Start").toString();
+//                String end = rs.getObject("End").toString();
+//                selectAppointments.add(new Appointment(rs.getInt("Appointment_ID"),
+//                        rs.getString("Title"),
+//                        rs.getString("Description"), rs.getString("Location"),
+//                        rs.getString("Type"),
+//                        UtcConversion.convertUTCtoLocal((LocalDateTime) rs.getObject("Start")),
+//                        UtcConversion.convertUTCtoLocal((LocalDateTime) rs.getObject("End")),
+//                        rs.getInt("Customer_ID"),
+//                        rs.getInt("User_ID"),
+//                        rs.getString("Contact_Name")));
+//            }
+//            return selectAppointments;
+//        } catch (Exception e) {
+//            System.out.println(e);
+//            return null;
+//        }
+//    }
+
+
+
+    /**This returns the select list of appointments.
+     * @return selectAppointments The list of select appointments.*/
     public static ObservableList<Appointment> getSelectAppointments(int custID){
         ObservableList<Appointment> selectAppointments = FXCollections.observableArrayList();
         try {
@@ -344,20 +380,20 @@ public abstract class DatabaseIO {
         }
     }
 
-    public static boolean checkLogin(String userName, String password) {
+    public static int checkLogin(String userName, String password) {
         try {
             query = "Select password from client_schedule.users where user_name = '" + userName + "'";
             PreparedStatement ps = JDBC.connection.prepareStatement(query);
             ResultSet rs = ps.executeQuery(query);
             rs.next();
             if ((rs.getString("Password")).equals(password)) {
-                return true;
+                return Integer.parseInt(rs.getString("User_ID"));
             }
         } catch (Exception e) {
             System.out.println(e);
-            return false;
+            return 0;
         }
-        return false;
+        return 0;
     }
 
     public static ObservableList getCustomerCombo() {

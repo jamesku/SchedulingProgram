@@ -73,10 +73,10 @@ public class AppointmentFormController
     @javafx.fxml.FXML
     public void initialize() {
 
+
         ApptCID.setItems(DatabaseIO.getCustomerCombo());
         ApptUID.setItems(DatabaseIO.getUserCombo());
         ApptContact.setItems(DatabaseIO.getContactCombo());
-
         ApptType.setItems(StData.getAvailableTypes());
         ApptStart.setItems(StData.getTimeBoxes());
         ApptEnd.setItems(StData.getTimeBoxes());
@@ -218,6 +218,11 @@ public class AppointmentFormController
             return;
         }
 
+        if(checkOverlap(apCID, localDateTimeStart, localDateTimeEnd)){
+            showAlert("Appointment overlaps with existing appointment.");
+            return;
+        }
+
 //        ZonedDateTime zonedDateTimeEnd = ZonedDateTime.of(localDateTimeEnd, ZoneId.systemDefault());
 
     if(!ApptTitle.getText().isEmpty()){
@@ -312,11 +317,24 @@ public class AppointmentFormController
             return false;
         }
 
-
-
         return true;
     }
 
+    public boolean checkOverlap(int custID, LocalDateTime startTime, LocalDateTime endTime){
+        ObservableList<Appointment> tempList = DatabaseIO.getSelectAppointments(custID);
+        for (Appointment a : tempList){
+            if(a.getLocalDateTimeStart().isAfter(startTime) && a.getLocalDateTimeStart().isBefore(endTime)) {
+            return true;
+            }
+            if(a.getLocalDateTimeEnd().isAfter(startTime) && a.getLocalDateTimeEnd().isBefore(endTime)) {
+                return true;
+            }
+            if(a.getLocalDateTimeStart().isBefore(startTime) && a.getLocalDateTimeEnd().isAfter(endTime)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 
 
