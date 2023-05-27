@@ -84,6 +84,7 @@ public class TopLevelMenu implements Initializable
 
     static int indexSelected;
     static int currentUserID;
+    static boolean firstTime = true;
 
 
     /**This function sets up the initial values.  It brings in all the parts and products in the system
@@ -111,8 +112,10 @@ public class TopLevelMenu implements Initializable
         tableCID.setCellValueFactory(new PropertyValueFactory<>("apCID"));
         tableUID.setCellValueFactory(new PropertyValueFactory<>("apUID"));
 
-        checkFifteenMinutes(currentUserID);
-
+        if (firstTime) {
+            checkFifteenMinutes(currentUserID);
+            firstTime = false;
+        }
         customersTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 selectedCustomerHandler();
@@ -157,16 +160,22 @@ public class TopLevelMenu implements Initializable
      * and time. If the user does not have any appointments within 15 minutes of logging in,
      * display a custom message in the user interface indicating there are no upcoming appointments.*/
     public void checkFifteenMinutes(int uid){
+        boolean noOverlap = true;
         LocalDateTime nowDT = LocalDateTime.now();
         ObservableList<Appointment> tempList = DatabaseIO.getAllAppointments();
         for (Appointment a : tempList){
-            if (a.getLocalDateTimeStart().isBefore(nowDT.plusMinutes(15))){
-                String alertText = "Appointment "+a.getApID()+ "at "+a.getLocalDateTimeStart() +
+            if (a.getLocalDateTimeStart().isBefore(nowDT.plusMinutes(15))&& a.getLocalDateTimeStart().isAfter(nowDT)){
+                noOverlap = false;
+                String alertText = "Appointment "+a.getApID()+ " at "+a.getLocalDateTimeStart() +
                         " is begining in the next 15 minutes";
                 showAlert(alertText);
             }
         }
+        if(noOverlap){
+            showAlert("There are no upcomming appointments in the next 15 minutes.");
+        }
     }
+
 
     /**This method shows an alert based on the passed string text.
      * @param alertText The text for the alert.*/

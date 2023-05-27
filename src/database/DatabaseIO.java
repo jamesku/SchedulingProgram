@@ -382,7 +382,7 @@ public abstract class DatabaseIO {
 
     public static int checkLogin(String userName, String password) {
         try {
-            query = "Select password from client_schedule.users where user_name = '" + userName + "'";
+            query = "Select password, User_ID from client_schedule.users where user_name = '" + userName + "'";
             PreparedStatement ps = JDBC.connection.prepareStatement(query);
             ResultSet rs = ps.executeQuery(query);
             rs.next();
