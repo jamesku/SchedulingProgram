@@ -292,6 +292,16 @@ public class TopLevelMenu implements Initializable
         stage.show();
     }
 
+    /**This function moves to the add part menu.
+     * @param actionEvent the button being pressed
+     * @throws IOException IOException*/
+    public void handleReporting(ActionEvent actionEvent) throws IOException {
+        stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
+        scene = FXMLLoader.load(getClass().getResource("/View/Reporting.fxml"));
+        stage.setScene(new Scene(scene));
+        stage.show();
+    }
+
     /**This function moves to the modify part menu. It calls a function in the controller for
      * the modify part menu to pass data identifying the part to be modified. If the function
      * is requested but no part is selected it displays an alert.
