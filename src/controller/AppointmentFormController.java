@@ -302,12 +302,18 @@ public class AppointmentFormController
     public boolean checkHours(LocalDateTime dt){
         ZonedDateTime zonedDT = ZonedDateTime.of(dt, ZoneId.systemDefault());
         ZonedDateTime estdt = zonedDT.withZoneSameInstant(ZoneId.of("America/New_York"));
+        if (estdt.getDayOfWeek() == DayOfWeek.SATURDAY || estdt.getDayOfWeek() == DayOfWeek.SUNDAY){
+            return false;
+        }
         if (estdt.getHour() > 22 || (estdt.getHour() == 22 && estdt.getMinute()>0)){
             return false;
         }
         if (estdt.getHour() < 8){
             return false;
         }
+
+
+
         return true;
     }
 
