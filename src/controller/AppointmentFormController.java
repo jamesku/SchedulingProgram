@@ -59,7 +59,7 @@ public class AppointmentFormController
     private static boolean newAppointment = true;
 
     /** This is the initialize method for this controller.  This function automatically runs
-     *  when the screen is loaded.  It is used here set up some information about the Appointment that
+     *  when the screen is loaded. It is used here set up some information about the Appointment that
      *  needs to be modified. Additionally, Platform.runlater is called. This method is built in
      *  to Run a specified runnable at some unspecified time in the future. This provides time
      *  for the screen to load before a listener is set on a windows event - in this case,

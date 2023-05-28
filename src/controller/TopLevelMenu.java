@@ -33,8 +33,6 @@ public class TopLevelMenu implements Initializable
     Stage stage;
     Parent scene;
 
-//    private Part passedPart = null;
-
     @javafx.fxml.FXML
     private AnchorPane mainAP;
     @javafx.fxml.FXML
@@ -82,14 +80,18 @@ public class TopLevelMenu implements Initializable
     @javafx.fxml.FXML
     private RadioButton allRadioButton;
 
+    //used for tracking what customer is selected
     static int indexSelected;
+    //used for tracking the program user
     static int currentUserID;
+    //used for checking for appointments 15 minutes away only once at login.
     static boolean firstTime = true;
 
-
     /**This function sets up the initial values.  It brings in all the parts and products in the system
-     * and associates their attributes to columns on the tables.  It also uses Platform.runlater to reset
-     * a listener on the window that is changed in other menus.*/
+     * and associates their attributes to columns on the tables.  It checks if this is the first time its
+     * being initialized to do the 15 minute appointment check and manages customer selection to show
+     * appointments.
+     * It also uses Platform.runlater to reset a listener on the window that is changed in other menus.*/
     @Deprecated
     public void initialize(URL url, ResourceBundle resourceBundle) {
         customersTable.setItems(DatabaseIO.getAllCustomers());
@@ -123,13 +125,14 @@ public class TopLevelMenu implements Initializable
         });
 
         customersTable.getSelectionModel().selectIndices(indexSelected);
+
         Platform.runLater(new Runnable() {
             @Override public void run() {
                 setListener();
             }
         });
-
     }
+
     /** This function sets a listener on a WindowsEvent.  This listener is set on the current
      * stage to gather close requests, which comes from the x in the top right corner. Since this action
      * is modified in other parts of the program, this function ensures that the original functionality
@@ -150,15 +153,17 @@ public class TopLevelMenu implements Initializable
 
     /**This function is called from another class to pass a particular piece of data.  Here is takes in
      * a userID and sets the local variable.
-     * @param uid The Part passed from another class.*/
+     * @param uid The userID passed from another class.*/
     public static void receiveData(int uid){
         currentUserID = uid;
     }
 
-    /**provide an alert when there is an appointment within 15 minutes of the user’s log-in.
-     * A custom message should be displayed in the user interface and include the appointment ID, date,
-     * and time. If the user does not have any appointments within 15 minutes of logging in,
-     * display a custom message in the user interface indicating there are no upcoming appointments.*/
+    /**This provides an alert when an appointment is within 15 minutes of the user log-in.
+     * A custom message is displayed in the user interface that includes the appointment ID, date,
+     * and time. All appointments are requested from the database and then iterated through.
+     * The evaluation is done in system using datetime methods.
+     * If there is not an appointment with 15, another alert is shown indicating this.
+     * @param uid the user ID to check*/
     public void checkFifteenMinutes(int uid){
         boolean noOverlap = true;
         LocalDateTime nowDT = LocalDateTime.now();
@@ -176,7 +181,6 @@ public class TopLevelMenu implements Initializable
         }
     }
 
-
     /**This method shows an alert based on the passed string text.
      * @param alertText The text for the alert.*/
     public void showAlert(String alertText) {
@@ -187,6 +191,7 @@ public class TopLevelMenu implements Initializable
         alert.showAndWait();
     }
 
+    /**This function resets options to show all appointments of a specific customer when one is selected.*/
     public void selectedCustomerHandler(){
         allRadioButton.setSelected(true);
         Customer selectedCustomer = (Customer) customersTable.getSelectionModel().getSelectedItem();
@@ -213,65 +218,7 @@ public class TopLevelMenu implements Initializable
         }
     }
 
-    /**This function allows the user to search for a Part and return the found values in the appropriate table.
-     * The function first creates an ObservableList using the text of the search field to find
-     * all Parts that have matched names, even if the name is incomplete.  If that list returns nothing,
-     * the function tried to match via ID number.  It displays on the table matched parts.
-     * @param event  the triggering user event*/
-    @Deprecated
-    public void searchByAppointment(Event event) {
-//        String q = searchForPartField.getText();
-//        ObservableList<Part> searchedParts = Inventory.lookupPart(q);
-//        if (searchedParts.size() == 0){
-//            try{
-//                int partID = Integer.parseInt(q);
-//                Part selectedPart = Inventory.lookupPart(partID);
-//                if (selectedPart != null){
-//                    searchedParts.add(selectedPart);
-//                }else{
-//                    showAlert("Part not found!");
-//                    searchForPartField.setText("");
-//                    searchedParts = Inventory.getAllParts();
-//                }
-//            }catch (Exception e)
-//            {
-//                showAlert("Part not found!");
-//                searchForPartField.setText("");
-//                searchedParts = Inventory.getAllParts();
-//            }
-//        }
-//        partsTable.setItems(searchedParts);
-    }
-
-    /**This function allows the user to search for a Product and return the found values in the appropriate table.
-     * The function first creates an ObservableList using the text of the search field to find
-     * all Products that have matched names, even if the name is incomplete.  If that list returns nothing,
-     * the function tried to match via ID number.  It displays on the table matched products.
-     * @param event  the triggering user event*/
-    @javafx.fxml.FXML
-    public void searchByCustomer(Event event) {
-//        productsTable.setItems(searchedProducts);
-//        String q = searchForProductField.getText();
-//        ObservableList<Product> searchedProducts = Inventory.lookupProduct(q);
-//        if (searchedProducts.size() == 0){
-//            try{
-//                int productID = Integer.parseInt(q);
-//                Product selectedProduct = Inventory.lookupProduct(productID);
-//                if (selectedProduct != null){
-//                    searchedProducts.add(selectedProduct);
-//                }else{
-//                    showAlert("Product not found!");
-//                    searchForProductField.setText("");
-//                    searchedProducts = Inventory.getAllProducts();
-//                }
-//            }catch (NumberFormatException e)
-//            {
-//                //ignore
-//            }
-//        }
-    }
-
-    /**This function moves to the add part menu.
+    /**This function moves to the add/modify appointments menu.
      * @param actionEvent the button being pressed
      * @throws IOException IOException*/
     public void addAppointmentButtonAction(ActionEvent actionEvent) throws IOException {
@@ -282,7 +229,7 @@ public class TopLevelMenu implements Initializable
         stage.show();
     }
 
-    /**This function moves to the add part menu.
+    /**This function logs out and moves to the login menu menu.
      * @param actionEvent the button being pressed
      * @throws IOException IOException*/
     public void logoutHandler(ActionEvent actionEvent) throws IOException {
@@ -292,7 +239,7 @@ public class TopLevelMenu implements Initializable
         stage.show();
     }
 
-    /**This function moves to the add part menu.
+    /**This function moves to the reporting menu.
      * @param actionEvent the button being pressed
      * @throws IOException IOException*/
     public void handleReportingButton(ActionEvent actionEvent) throws IOException {
@@ -302,13 +249,12 @@ public class TopLevelMenu implements Initializable
         stage.show();
     }
 
-    /**This function moves to the modify part menu. It calls a function in the controller for
-     * the modify part menu to pass data identifying the part to be modified. If the function
-     * is requested but no part is selected it displays an alert.
+    /**This function moves to the modify appointment menu. It calls a function in the controller for
+     * the modify appointment menu to pass data identifying the appointment to be modified. If the function
+     * is requested but no appointment is selected it displays an alert.
      * @param actionEvent the button being pressed
      * @throws IOException IOException*/
     public void modifyAppointmentButtonAction(ActionEvent actionEvent) throws IOException {
-        //had to include a check to make sure something was selected
         indexSelected = customersTable.getSelectionModel().getSelectedIndex();
         if(appointmentsTable.getSelectionModel().getSelectedItem() != null) {
             Appointment passedAppointment = (Appointment) appointmentsTable.getSelectionModel().getSelectedItem();
@@ -323,8 +269,9 @@ public class TopLevelMenu implements Initializable
         }
     }
 
-    /**This function deletes the selected part. Before deletion it uses a confirmation alert to
-     * confirm the user activity.  Additionally, if no part is deleted, it alerts the user.
+    /**This function deletes the selected appointment. Before deletion it uses a confirmation alert to
+     * confirm the user activity.  If no appointment is deleted, it alerts the user, otherwise
+     * appointment id and type are deleted.
      * @param actionEvent the button being pressed*/
     public void deleteAppointmentButtonAction(ActionEvent actionEvent) {
         indexSelected = customersTable.getSelectionModel().getSelectedIndex();
@@ -343,6 +290,7 @@ public class TopLevelMenu implements Initializable
             }
         }
     }
+
     /**This function moves to the add customer menu.
      * @param actionEvent the button being pressed
      * @throws IOException IOException*/
@@ -352,6 +300,7 @@ public class TopLevelMenu implements Initializable
         stage.setScene(new Scene(scene));
         stage.show();
     }
+
     /**This function moves to the modify customer menu. It calls a function in the controller for
      * the modify customer menu to pass data identifying the customer to be modified.  If the function
      * is requested but no customer is selected it displays an alert.
@@ -371,9 +320,10 @@ public class TopLevelMenu implements Initializable
             showAlert("Select a customer record to modify!");
         }
     }
-    /**This function deletes the selected product. Before deletion it uses a confirmation alert to
-     * confirm the user activity.  Additionally, it checks to see if a product has an associated
-     * part, and if it does it does not delete hte product. If no product is deleted, it alerts the user.
+
+    /**This function deletes the selected customer. Before deletion it uses a confirmation alert to
+     * confirm the user activity.  If confirmed, it deletes all appointments first. If no customer
+     * is deleted, it alerts the user.  It then reloads the customers table.
      * @param actionEvent the button being pressed*/
     public void deleteCustomerButtonAction(ActionEvent actionEvent) {
         if(confirmationAlert("Are you sure you want to delete that Customer record? All associated appointments " +
@@ -387,13 +337,6 @@ public class TopLevelMenu implements Initializable
         }
     }
 
-//    /**This function is called from another class to pass a particular piece of data.  Here is takes in
-//     * a Part object and sets the local variable.
-//     * @param p The Part passed from another class.*/
-//    public static void receiveData(int indexPassed){
-//        indexSelected = indexPassed;
-//    }
-
     /**this function close the program when called.  The user must confirm the exit.
      * @param actionEvent the event*/
     public void exitHandler(ActionEvent actionEvent) {
@@ -401,20 +344,31 @@ public class TopLevelMenu implements Initializable
             Platform.exit();}
     }
 
+    /**The function request all customers and sets the customers table. It resets the radio options.
+     * @param actionEvent button click*/
     public void allCustomersAction(ActionEvent actionEvent){
         allRadioButton.setSelected(true);
         customersTable.getSelectionModel().clearSelection();
         appointmentsTable.setItems(DatabaseIO.getAllAppointments());
     }
 
+    /**The function request all appointments and sets the appointments table.
+     * @param actionEvent button click*/
     public void seeAllAppointments(ActionEvent actionEvent){
         if(customersTable.getSelectionModel().getSelectedItem() == null) {
             appointmentsTable.setItems(DatabaseIO.getAllAppointments());
         } else{
             selectedCustomerHandler();
         }
-
     }
+
+    /**The function request all appointments within the next month and sets the appointments table
+     * based on a comparison done in system.
+     * Based on if a customer is selected or not, the appointments table will have all appointments or
+     * just select appointments.
+     * <p><b>LAMBDA EXPRESSION is included here as an alternative to move through an ObservableList
+     * and check if the object date qualifies.</b></p>
+     * @param actionEvent button click*/
     public void seeMonthAppointments(ActionEvent actionEvent){
         if(customersTable.getSelectionModel().getSelectedItem() == null) {
             ObservableList<Appointment> tempList = DatabaseIO.getAllAppointments();
@@ -435,16 +389,16 @@ public class TopLevelMenu implements Initializable
                 if(a.getLocalDateTimeEnd().isBefore(LocalDateTime.now().plusMonths(1))){
                     newList.add(a); }
                     });
-//            for (Appointment a : tempList){
-//                if(a.getLocalDateTimeEnd().isBefore(LocalDateTime.now().plusMonths(1))){
-//                    newList.add(a);
-//                }
-//            }
             appointmentsTable.setItems(newList);
         }
 
     }
 
+    /**The function request all appointments within the next week and sets the appointments table
+     * based on a comparison done in system.
+     * Based on if a customer is selected or not, the appointments table will have all appointments or
+     * just select appointments.
+     * @param actionEvent button click*/
     public void seeWeekAppointments(ActionEvent actionEvent){
         if(customersTable.getSelectionModel().getSelectedItem() == null) {
             ObservableList<Appointment> tempList = DatabaseIO.getAllAppointments();

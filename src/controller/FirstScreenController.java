@@ -25,6 +25,7 @@ import java.time.ZonedDateTime;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+/**Controls the Login Screen*/
 public class FirstScreenController implements Initializable {
     @javafx.fxml.FXML
     private TextField loginUserName;
@@ -41,9 +42,18 @@ public class FirstScreenController implements Initializable {
 
     Stage stage;
     Parent scene;
-
+    /**Sets a String for translation purposes when alerting an invalid login.*/
     String alertText = "Username or Password not recognized, please try again.";
 
+    /**This is the initialize method for this controller.  This function automatically runs
+     * when the screen is loaded.  It is used here set up the login form using text that is
+     * eligible for translation based on the location of the accesing computer.
+     * <p><b>LAMBDA EXPRESSION is included here which sets a handler on the loginPassword field
+     * to detect if the ENTER key is pressed. If so, it triggers the loginSubmit action.
+     * </b></p>
+     * @param url the URL
+     * @param resourceBundle language translations
+     * */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Locale currentLocale = Locale.getDefault();
@@ -66,9 +76,12 @@ public class FirstScreenController implements Initializable {
             }
         } );
     }
+    /**Handler for the login button to check if the user/password is valid by checking the database.
+     * It also writes a log of successful and unsuccessful attemts to a text file.  If successful
+     * user is sent to the toplevelmenu. If not, an alert is displayed.
+     * @param actionEvent the button click*/
     @javafx.fxml.FXML
     public void submitLogin(ActionEvent actionEvent) throws IOException, SQLException {
-
         FileOutputStream fos = new FileOutputStream("login_activity.txt", true);
         String content = null;
         int uid = DatabaseIO.checkLogin(loginUserName.getText(), loginPassword.getText());
@@ -94,7 +107,6 @@ public class FirstScreenController implements Initializable {
             showAlert();
         }
     }
-
 
     /**This method shows an alert based on the passed string text.
      **/

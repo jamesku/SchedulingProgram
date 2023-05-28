@@ -42,16 +42,23 @@ public class CustomerFormController
 
     /**A variable to hold the product to be modified, if one is passed*/
     private static Customer passedCustomer = null;
+    /**A boolean to determine if its a customer to be modified or a new customer.*/
     static boolean newCustomer = true;
 
     Stage stage;
     Parent scene;
 
+    /** This is the initialize method for this controller.  This function automatically runs
+     *  when the screen is loaded.  It is used here set up some information about the Customer that
+     *  needs to be modified. Additionally, Platform.runlater is called. This method is built in
+     *  to Run a specified runnable at some unspecified time in the future. This provides time
+     *  for the screen to load before a listener is set on a windows event - in this case,
+     *  clicking on the x in the top right corner.
+     * */
     @javafx.fxml.FXML
     public void initialize() {
 
         comboCountry.setItems(DatabaseIO.getCountryCombo());
-
 
         if (newCustomer){
             customerID.setText("Will be auto-generated");
@@ -71,10 +78,8 @@ public class CustomerFormController
                 setListener();
             }
         });
-
-
-
     }
+
     /** This function sets a listener on a WindowsEvent.  This listener is set on the current
      * stage to gather close requests, which comes from the x in the top right corner.  Instead of
      * closing the window, the event is consumed, and instead the program is redirected to return
@@ -96,8 +101,9 @@ public class CustomerFormController
             }
         });
     }
+
     /**This function is called from another class to pass a particular piece of data.  Here is takes in
-     * a Customer object and sets the local variable.
+     * a Customer object and sets the local variable.  It also triggers the newCustomer boolean to false.
      * @param p The customer passed from another class.*/
     public static void receiveData(Customer p){
         passedCustomer = p;
@@ -105,7 +111,7 @@ public class CustomerFormController
     }
 
     /** Handles a selection of a country in a combobox.  Using the selection it calls to the
-     * database to set up the first level division combobox.
+     * database to get values set up the first level division combobox.
      * @param actionEvent actionEvent*/
     @javafx.fxml.FXML
     public void countryComboActionHandler(ActionEvent actionEvent) {
@@ -114,15 +120,7 @@ public class CustomerFormController
         comboDivision.setItems(DatabaseIO.getDivisionCombo((String)comboCountry.getValue()));
     }
 
-    /** Handles a selection of a first level division in a combobox.
-     * @param actionEvent actionEvent*/
-    @javafx.fxml.FXML
-    public void divisionComboActionHandler(ActionEvent actionEvent) {
-        int selectedIndex = comboDivision.getSelectionModel().getSelectedIndex();
-        Object selectedItem = comboDivision.getSelectionModel().getSelectedItem().toString();
-    }
-
-    /** This method sends the user back to the main menu.
+    /** This method sends the user back to the main menu. It also resets the newCustomer boolean.
      * @param actionEvent button click
      * @throws IOException IOexception*/
     @Deprecated
@@ -133,15 +131,18 @@ public class CustomerFormController
         scene = FXMLLoader.load(getClass().getResource("/View/TopLevelMenu.fxml"));
         stage.setScene(new Scene(scene));
         stage.show();
-
     }
 
-    /**This is the save function for a modified product.  First it finds the index of where the modified
-     * product occurs in the ObservableList of all products.  Then it checks if the min/max and inventory
-     * values are appropriate and returns an alert if not. It then checks if the product is outsourced
-     * or inhouse and tries to update the product as is appropriate. Field types are checked by parsing
-     * and if an error is thrown an alert is shown. It then updates the Observable List of all products
-     * and returns the main menu.
+    /**This is the save function for a new or modified customer.  It checks:
+     * the customerID is an integer, if not, it defaults the value to 0,
+     * the customer Name has a value,
+     * the address has a value,
+     * the postal code has an integer value,
+     * the phone number has an integer value,
+     * the country combobox has a selected value,
+     * the division combobox has a selected value,
+     * Field types are checked by parsing and if an error is thrown an alert is shown.
+     * It then creates a customer object and passes it to the database for modification or insertion.
      * @param actionEvent button click*/
     @Deprecated
     public void saveHandler(ActionEvent actionEvent) throws IOException {
@@ -185,19 +186,18 @@ public class CustomerFormController
         }
 
         if(comboCountry.getValue() != null){
-        Object selectedItem = comboCountry.getSelectionModel().getSelectedItem().toString();
-        country = (String) selectedItem;} else {
-        showAlert("Please pick a country");
-        return;
+            Object selectedItem = comboCountry.getSelectionModel().getSelectedItem().toString();
+            country = (String) selectedItem;} else {
+            showAlert("Please pick a country");
+            return;
         }
 
         if(comboDivision.getValue() != null){
-        Object selectedItemDiv = comboDivision.getSelectionModel().getSelectedItem().toString();
-        division = (String) selectedItemDiv;} else
-        {showAlert("Please pick a division");
-            return;}
-
-        ObservableList<Appointment> newList = FXCollections.observableArrayList();
+            Object selectedItemDiv = comboDivision.getSelectionModel().getSelectedItem().toString();
+            division = (String) selectedItemDiv;} else {
+            showAlert("Please pick a division");
+            return;
+        }
 
         Customer pass = new Customer(custID, name, address,postalCode,phoneNumber,country,division);
         if (newCustomer) {
@@ -219,13 +219,14 @@ public class CustomerFormController
         alert.showAndWait();
     }
 
-public void clearValues(){
-    customerID.setText("");
-    customerName.setText("");
-    customerAddress.setText("");
-    customerPC.setText("");
-    customerPhone.setText("");
-    comboCountry.setValue(null);
-    comboDivision.setValue(null);
-}
+    /**Clears all values on the form as needed.*/
+    public void clearValues(){
+        customerID.setText("");
+        customerName.setText("");
+        customerAddress.setText("");
+        customerPC.setText("");
+        customerPhone.setText("");
+        comboCountry.setValue(null);
+        comboDivision.setValue(null);
+    }
 }
