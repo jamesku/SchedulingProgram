@@ -3,38 +3,11 @@ package model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.sql.Time;
-
+/**This class hold miscellaneous functions to construct data sets.*/
 public class StData {
 
-//    public static ObservableList<String> getTimeBoxesStart() {
-//        ObservableList<String> allTimeBoxes = FXCollections.observableArrayList();
-//        String[] quarterHours = { "00", "15", "30", "45" };
-//        for (int i = 8; i < 12; i++) {
-//            for (int j = 0; j < 4; j++) {
-//                String t = i + ":" + quarterHours[j] + "AM";
-//                allTimeBoxes.add(t);
-//            }
-//        }
-//            String t = "12:00PM";
-//            allTimeBoxes.add(t);
-//            t = "12:15PM";
-//            allTimeBoxes.add(t);
-//            t = "12:30PM";
-//            allTimeBoxes.add(t);
-//            t = "12:45PM";
-//            allTimeBoxes.add(t);
-//
-//            for (int k = 1; k < 10; k++) {
-//                for (int l = 0; l < 4; l++) {
-//                    t = k + ":" + quarterHours[l] + "PM";
-//                    allTimeBoxes.add(t);
-//                }
-//            }
-//
-//            return allTimeBoxes;
-//        }
-
+    /**This constructs a list of all times in a day in 15 minute increments.
+     * @return allTimeBoxes the String list of 15 minute time increments*/
     public static ObservableList<String> getTimeBoxes() {
         ObservableList<String> allTimeBoxes = FXCollections.observableArrayList();
         String[] quarterHours = { "00", "15", "30", "45" };
@@ -70,10 +43,11 @@ public class StData {
                 allTimeBoxes.add(p);
             }
         }
-
         return allTimeBoxes;
     }
 
+    /**This constructs a list of all different appointment types.
+     * @return allAvailableTypes the String list of available appointment types*/
     public static ObservableList<String> getAvailableTypes() {
         ObservableList<String> allAvailableTypes = FXCollections.observableArrayList();
         allAvailableTypes.add("Planning Session");

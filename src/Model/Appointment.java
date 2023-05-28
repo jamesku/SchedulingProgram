@@ -1,8 +1,6 @@
 package model;
 
-
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 
 /**
  *Class to define an Appointment
@@ -23,7 +21,7 @@ public class Appointment {
     private int apCID;
     private String apContactName;
 
-    /**An object part.
+    /**An object for appointments.
      * @param apID appointment ID
      * @param apTitle appointment title
      * @param apDesc appointment description
@@ -36,6 +34,7 @@ public class Appointment {
      * @param apUID appointment user id
      * @param apCID appointment customer id
      * @param apContactName appointment contact name*/
+
     public Appointment(int apID, String apTitle, String apDesc, String apLocation, String apType,
             String apStartString, String apEndString, LocalDateTime localDateTimeStart,
                        LocalDateTime localDateTimeEnd, int apCID, int apUID, String apContactName) {
@@ -52,8 +51,6 @@ public class Appointment {
         this.apCID = apCID;
         this.apContactName = apContactName;
     }
-
-
 
     /**
      * @return the appointment start time in String
@@ -83,7 +80,6 @@ public class Appointment {
         this.apEndString = apEndString;
     }
 
-
     /**
      * @return the appointment contact ID
      */
@@ -111,7 +107,6 @@ public class Appointment {
     public void setApType(String apType) {
         this.apType = apType;
     }
-
 
     /**
      * @return the appointment ID
@@ -224,5 +219,4 @@ public class Appointment {
     public void setApCID(int apCID) {
         this.apCID = apCID;
     }
-
 }

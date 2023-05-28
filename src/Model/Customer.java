@@ -1,7 +1,6 @@
 package model;
 
 import javafx.collections.ObservableList;
-import model.Appointment;
 
 /**Class to define a Customer.*/
 public class Customer {
@@ -15,7 +14,7 @@ public class Customer {
     private String division;
     private ObservableList<Appointment> associatedAppointments;
 
-    /**An object part.
+    /**An object constructor for customers.
      * @param custID the customer ID
      * @param name the customer name
      * @param address the customer address
@@ -23,10 +22,9 @@ public class Customer {
      * @param phoneNumber the customer phone Number
      * @param country the customer country
      * @param division the customer division
-     * @param associatedAppointments  the associated appointments*/
+     * */
     public Customer(int custID, String name, String address,String postalCode, String phoneNumber,
                     String country, String division) {
-//        this.associatedAppointments = associatedAppointments;
         this.custID = custID;
         this.name = name;
         this.address = address;
@@ -34,8 +32,8 @@ public class Customer {
         this.phoneNumber = phoneNumber;
         this.country = country;
         this.division = division;
-
     }
+
     /**
      * @param custID the customer id to set
      */
@@ -126,12 +124,14 @@ public class Customer {
     public void setAssociatedAppointments(ObservableList<Appointment> associatedAppointments) {
         this.associatedAppointments = associatedAppointments;
     }
+
     /**adds the associated appointment to the customer
     * @param app The appointment to associate
     * */
     public void addAssociatedAppointment(Appointment app){
         associatedAppointments.add(app);
     }
+
     /**removes the associated appointment from the customer
      * @param selectedAssociatedApp The appointment to disassociate
      * @return boolean if appointment is deleted.
@@ -140,6 +140,7 @@ public class Customer {
         associatedAppointments.remove(selectedAssociatedApp);
         return true;
     }
+
     /**
      * @return all associated appointment
      */
