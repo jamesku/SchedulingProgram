@@ -15,7 +15,6 @@ import javafx.stage.Stage;
 import model.StData;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 public class ReportingFormController
 {
@@ -78,8 +77,8 @@ public class ReportingFormController
         tableLocation.setCellValueFactory(new PropertyValueFactory<>("apLocation"));
         tableType.setCellValueFactory(new PropertyValueFactory<>("apType"));
         tableContact.setCellValueFactory(new PropertyValueFactory<>("apContactName"));
-        tableStart.setCellValueFactory(new PropertyValueFactory<>("localDateTimeStart"));
-        tableEnd.setCellValueFactory(new PropertyValueFactory<>("localDateTimeEnd"));
+        tableStart.setCellValueFactory(new PropertyValueFactory<>("apStartString"));
+        tableEnd.setCellValueFactory(new PropertyValueFactory<>("apEndString"));
         tableCID.setCellValueFactory(new PropertyValueFactory<>("apCID"));
         tableUID.setCellValueFactory(new PropertyValueFactory<>("apUID"));
     }
