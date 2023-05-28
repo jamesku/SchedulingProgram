@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class UtcConversion {
 
@@ -21,5 +22,12 @@ public class UtcConversion {
         return localdt;
     }
 
+    /**Takes a local date time variable and formats it to date and time of day string (AM PM).*/
+    public static String dtFormat(LocalDateTime ldtToFormat){
+        String formatted = null;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm a");
+        formatted = ldtToFormat.format(formatter);
+        return formatted;
+    }
 
 }

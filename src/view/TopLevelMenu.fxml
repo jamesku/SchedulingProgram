@@ -45,12 +45,12 @@
                         <TableColumn fx:id="tableTitle" editable="false" prefWidth="69.0" sortable="false" text="Title" />
                         <TableColumn fx:id="tableDescription" editable="false" prefWidth="94.0" sortable="false" text="Description" />
                         <TableColumn fx:id="tableLocation" prefWidth="73.0" sortable="false" text="Location" />
-                        <TableColumn fx:id="tableContact" prefWidth="79.0" text="Contact" />
-                        <TableColumn fx:id="tableType" prefWidth="64.0" text="Type" />
-                        <TableColumn fx:id="tableStart" prefWidth="118.0" text="Start" />
-                        <TableColumn fx:id="tableEnd" prefWidth="110.0" text="End" />
-                        <TableColumn fx:id="tableCID" prefWidth="75.0" text="Customer ID" />
-                        <TableColumn fx:id="tableUID" prefWidth="75.0" text="User ID" />
+                        <TableColumn fx:id="tableContact" prefWidth="70.0" text="Contact" />
+                        <TableColumn fx:id="tableType" prefWidth="62.0" text="Type" />
+                        <TableColumn fx:id="tableStart" prefWidth="136.0" text="Start" />
+                        <TableColumn fx:id="tableEnd" prefWidth="127.0" text="End" />
+                        <TableColumn fx:id="tableCID" prefWidth="78.0" text="Customer ID" />
+                        <TableColumn fx:id="tableUID" prefWidth="48.0" text="User ID" />
                     </columns>
                 </TableView>
                 <Button layoutX="117.0" layoutY="10.0" mnemonicParsing="false" onAction="#addAppointmentButtonAction" text="Add" />

@@ -223,7 +223,8 @@ public class AppointmentFormController
             return;
         }
 
-//        ZonedDateTime zonedDateTimeEnd = ZonedDateTime.of(localDateTimeEnd, ZoneId.systemDefault());
+        String ApptStartString = localDateTimeStart.toString();
+        String ApptEndString = localDateTimeEnd.toString();
 
     if(!ApptTitle.getText().isEmpty()){
            apTitle = ApptTitle.getText();
@@ -253,8 +254,8 @@ public class AppointmentFormController
             return;
         }
 
-        Appointment pass = new Appointment(apID, apTitle, apDesc, apLocation,apType, localDateTimeStart,
-                localDateTimeEnd,apCID,apUID, apContact);
+        Appointment pass = new Appointment(apID, apTitle, apDesc, apLocation,apType,ApptStartString,
+                ApptEndString, localDateTimeStart, localDateTimeEnd,apCID,apUID, apContact);
         if (newAppointment) {
             DatabaseIO.addAppointment(pass);
             cancelHandler(actionEvent);

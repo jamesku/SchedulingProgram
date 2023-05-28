@@ -240,12 +240,10 @@ public abstract class DatabaseIO {
                         rs.getString("Title"),
                         rs.getString("Description"), rs.getString("Location"),
                         rs.getString("Type"),
+                        UtcConversion.dtFormat(UtcConversion.convertUTCtoLocal((LocalDateTime) rs.getObject("Start"))),
+                        UtcConversion.dtFormat(UtcConversion.convertUTCtoLocal((LocalDateTime) rs.getObject("End"))),
                         UtcConversion.convertUTCtoLocal((LocalDateTime) rs.getObject("Start")),
-//                        rs.getTimestamp("Start").toLocalDateTime(),
-//                        rs.getTimestamp("End").toLocalDateTime(),
-//                        (LocalDateTime) rs.getObject("Start"),
                         UtcConversion.convertUTCtoLocal((LocalDateTime) rs.getObject("End")),
-//                        (LocalDateTime) rs.getObject("End"),
                         rs.getInt("Customer_ID"),
                         rs.getInt("User_ID"),
                         rs.getString("Contact_Name")));
@@ -277,12 +275,10 @@ public abstract class DatabaseIO {
                         rs.getString("Title"),
                         rs.getString("Description"), rs.getString("Location"),
                         rs.getString("Type"),
+                        UtcConversion.dtFormat(UtcConversion.convertUTCtoLocal((LocalDateTime) rs.getObject("Start"))),
+                        UtcConversion.dtFormat(UtcConversion.convertUTCtoLocal((LocalDateTime) rs.getObject("End"))),
                         UtcConversion.convertUTCtoLocal((LocalDateTime) rs.getObject("Start")),
-//                        rs.getTimestamp("Start").toLocalDateTime(),
-//                        rs.getTimestamp("End").toLocalDateTime(),
-//                        (LocalDateTime) rs.getObject("Start"),
                         UtcConversion.convertUTCtoLocal((LocalDateTime) rs.getObject("End")),
-//                        (LocalDateTime) rs.getObject("End"),
                         rs.getInt("Customer_ID"),
                         rs.getInt("User_ID"),
                         rs.getString("Contact_Name")));
@@ -305,7 +301,6 @@ public abstract class DatabaseIO {
             PreparedStatement ps = JDBC.connection.prepareStatement(query);
             ResultSet rs = ps.executeQuery(query);
 
-//            LocalDateTime localDate = LocalDateTime.parse(strLocalDate, formatter);
             while(rs.next()) {
                 String start = rs.getTimestamp("Start").toString();
                 String end = rs.getObject("End").toString();
@@ -313,12 +308,10 @@ public abstract class DatabaseIO {
                         rs.getString("Title"),
                         rs.getString("Description"), rs.getString("Location"),
                         rs.getString("Type"),
+                        UtcConversion.dtFormat(UtcConversion.convertUTCtoLocal((LocalDateTime) rs.getObject("Start"))),
+                        UtcConversion.dtFormat(UtcConversion.convertUTCtoLocal((LocalDateTime) rs.getObject("End"))),
                         UtcConversion.convertUTCtoLocal((LocalDateTime) rs.getObject("Start")),
-//                        rs.getTimestamp("Start").toLocalDateTime(),
-//                        rs.getTimestamp("End").toLocalDateTime(),
-//                        (LocalDateTime) rs.getObject("Start"),
                         UtcConversion.convertUTCtoLocal((LocalDateTime) rs.getObject("End")),
-//                        (LocalDateTime) rs.getObject("End"),
                         rs.getInt("Customer_ID"),
                         rs.getInt("User_ID"),
                         rs.getString("Contact_Name")));

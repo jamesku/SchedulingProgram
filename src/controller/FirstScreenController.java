@@ -12,12 +12,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
+import model.UtcConversion;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Locale;
@@ -69,19 +71,26 @@ public class FirstScreenController implements Initializable {
 
         FileOutputStream fos = new FileOutputStream("login_activity.txt", true);
         String content = null;
-
-        fos.write();
         int uid = DatabaseIO.checkLogin(loginUserName.getText(), loginPassword.getText());
         if(uid>0){
+            content = "User "+loginUserName.getText()+ " succesfully logged in at "+
+                    UtcConversion.dtFormat(UtcConversion.convertLocalToUTC(LocalDateTime.now())) +
+                            " UTC \r\n";
             byte[] contentInBytes = content.getBytes();
-//            if(true){
-                TopLevelMenu.receiveData(uid);
+            fos.write(contentInBytes);
+            fos.close();
+            TopLevelMenu.receiveData(uid);
             Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/TopLevelMenu.fxml"));
             Parent root = loader.load();
             stage.setScene(new Scene(root));
             stage.show();
         } else {
+            content = "User "+loginUserName.getText()+ " gave invalid login at "+
+                    UtcConversion.dtFormat(UtcConversion.convertLocalToUTC(LocalDateTime.now())) + " UTC \r\n";
+            byte[] contentInBytes = content.getBytes();
+            fos.write(contentInBytes);
+            fos.close();
             showAlert();
         }
     }
