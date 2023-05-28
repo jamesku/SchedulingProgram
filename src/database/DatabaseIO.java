@@ -8,29 +8,20 @@ import model.UtcConversion;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 
-/**This class manages the inventory of products and parts. It allows products and parts to be added
- * deleted, found, replaced, associated and disassociated and can return a full list of either set.*/
+/**This class manages the database transactions. It allows various combinations of customers and appointment
+ * data to be retrieved.
+ * */
 public abstract class DatabaseIO {
 
     /**A String for the sql query*/
     private static String query;
 
-    /**Initialize lists of Parts*/
-//    private static ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
-    /**Initialize list of Products */
-    private static ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
-    /** This adds a given part to the database.
-     * @param newCustomer the part to add*/
-
+    /** This adds a customer to the database. It gets passed a customer object and retrieves various
+     * values to insert into the database.
+     * @param newCustomer the customer object to add*/
     public static void addCustomer(Customer newCustomer){
         try {
             query = "INSERT INTO customers(Customer_Name, Address, Postal_Code, "+
@@ -48,7 +39,8 @@ public abstract class DatabaseIO {
         }
     }
 
-    /** This adds an appointment to the list of appointments.
+    /** This adds an appointment to the database. It gets passed an appointment object and retrieves various
+     * values to insert into the database. It converts time to UTC for storage in the database.
      * @param newAppointment the part to add*/
     public static void addAppointment(Appointment newAppointment){
         try {
@@ -60,8 +52,6 @@ public abstract class DatabaseIO {
                     "'"+ newAppointment.getApType()+"', "+
                     "'"+ UtcConversion.convertLocalToUTC((newAppointment.getLocalDateTimeStart()))+"', "+
                     "'"+ UtcConversion.convertLocalToUTC((newAppointment.getLocalDateTimeEnd()))+"', "+
-//                    "'"+ newAppointment.getLocalDateTimeStart()+"', "+
-//                    "'"+ newAppointment.getLocalDateTimeEnd()+"', "+
                     ""+ newAppointment.getApUID()+", "+
                     "'"+ newAppointment.getApCID()+"', "+
                     "(SELECT Contact_ID FROM contacts WHERE Contact_name = '"
@@ -72,57 +62,11 @@ public abstract class DatabaseIO {
             System.out.println(e);
         }
     }
-    /** This finds a given part in the list of parts based on an id number.
-     * @param customerId the part to add
-     * @return p the found part*/
-    public static Customer lookupCustomer(int customerId){
-//        for(Part p : allParts) {
-//            if (p.getId() == partId) {
-//                return p;
-//            }
-//        }
-        return null;
-    }
-    /** This finds a given product in the list of parts based on an id number.
-     * @param appointmentId the appointment to add
-     * @return p the found part*/
-    public static Appointment lookupAppointment(int appointmentId){
-//        for(Product p : allProducts) {
-//            if (p.getId() == productId) {
-//                return p;
-//            }
-//        }
-        return null;
-    }
 
-    /** This finds one or more appointments in the list of appointments based on a String.
-     * @param appointmentName the part to add
-     * @return an ObservableList of namedParts of the found appointments*/
-    public static ObservableList<Appointment> lookupAppointment(String appointmentName){
-        ObservableList<Appointment> namedParts = FXCollections.observableArrayList();
-//        for (Part p: allParts ){
-//            if (p.getName().contains(partName)){
-//                namedParts.add(p);
-//            }
-//        }
-        return namedParts;
-    }
-
-    /** This finds one or more customers in the list of customers based on a String.
-     * @param customerName the customer to add
-     * @return an ObservableList of namedCustomers of the found customers*/
-    public static ObservableList<Customer> lookupCustomer(String customerName){
-        ObservableList<Customer> namedProducts = FXCollections.observableArrayList();
-//        for (Product p: allProducts ){
-//            if (p.getName().contains(productName)){
-//                namedProducts.add(p);
-//            }
-//        }
-        return namedProducts;
-    }
-/**This replaces a customer in the Arraylist with another customer.
- * @param selectedCustomer the new part to be inserted
- * */
+    /**This updates a customer in the database. It uses the provided customer ID to select from
+     * a joined table of the customers and division_id.
+     * @param selectedCustomer the customer to be updated
+     * */
     public static void updateCustomer(Customer selectedCustomer){
         try {
             query = "UPDATE customers SET "+
@@ -140,8 +84,11 @@ public abstract class DatabaseIO {
             System.out.println(e);
         }
     }
-    /**This replaces a product in the Arraylist with another part.
-     * @param newAppointment the new part to be inserted
+
+    /**This updates an appointment in the database.  It uses the provided appointment ID to select from
+     * a joined table of the customers and contact_names & IDs. It converts times to UTC for storage
+     * in the database.
+     * @param newAppointment the new appointment to be updated
      * */
     public static void updateAppointment(Appointment newAppointment){
         try {
@@ -151,9 +98,6 @@ public abstract class DatabaseIO {
                     "Location= '" + newAppointment.getApLocation()+"', "+
                     "Type= '" + newAppointment.getApType()+"', "+
                     "Start= '" + UtcConversion.convertLocalToUTC(newAppointment.getLocalDateTimeStart())+"', "+
-//                    "Start= '" + Timestamp.valueOf(newAppointment.getLocalDateTimeStart().atZone(ZoneId.systemDefault()))+"', "+
-//                    "End= '" + Timestamp.valueOf(newAppointment.getLocalDateTimeEnd())+"', "+
-//                    "Start= '" + newAppointment.getLocalDateTimeStart()+"', "+
                     "End= '" + UtcConversion.convertLocalToUTC(newAppointment.getLocalDateTimeEnd())+"', "+
                     "User_ID= "+ newAppointment.getApUID()+", "+
                     "Customer_ID= " + newAppointment.getApCID()+", "+
@@ -164,12 +108,12 @@ public abstract class DatabaseIO {
             int rowsaffected = ps.executeUpdate(query);
         } catch (Exception e) {
             System.out.println(e);
-        }
+            }
+    }
 
-
-        }
-    /**This deletes a customer from the database.
+    /**This deletes a customer from the database based on customer_id. It returns true if successful.
      * @param custID The customer id associated with the customer to delete.
+     * @return boolean if the delete is successful.
      **/
     public static boolean deleteCustomer(int custID){
         try {
@@ -184,43 +128,10 @@ public abstract class DatabaseIO {
         }
     }
 
-
-//    /**This returns the select list of appointments.
-//     * @return selectAppointments The list of select appointments.*/
-//    public static ObservableList<Appointment> checkFifteenMinutes(int userID){
-//        LocalDateTime utcNow = UtcConversion.convertLocalToUTC(LocalDateTime.now());
-//        ObservableList<Appointment> selectAppointments = FXCollections.observableArrayList();
-//        try {
-//            query = "SELECT Appointment_ID, Title, Description, Location, Type, Start, End, " +
-//                    "Customer_ID, User_ID, Contact_Name "+
-//                    "FROM appointments JOIN contacts ON appointments.Contact_ID = contacts.Contact_ID "+
-//                    "WHERE User_ID = "+userID+ " & WHERE Start;";
-//            PreparedStatement ps = JDBC.connection.prepareStatement(query);
-//            ResultSet rs = ps.executeQuery(query);
-//
-//            while(rs.next()) {
-//                String start = rs.getTimestamp("Start").toString();
-//                String end = rs.getObject("End").toString();
-//                selectAppointments.add(new Appointment(rs.getInt("Appointment_ID"),
-//                        rs.getString("Title"),
-//                        rs.getString("Description"), rs.getString("Location"),
-//                        rs.getString("Type"),
-//                        UtcConversion.convertUTCtoLocal((LocalDateTime) rs.getObject("Start")),
-//                        UtcConversion.convertUTCtoLocal((LocalDateTime) rs.getObject("End")),
-//                        rs.getInt("Customer_ID"),
-//                        rs.getInt("User_ID"),
-//                        rs.getString("Contact_Name")));
-//            }
-//            return selectAppointments;
-//        } catch (Exception e) {
-//            System.out.println(e);
-//            return null;
-//        }
-//    }
-
-
-
-    /**This returns the select list of appointments.
+    /**This returns the select list of appointments based on customer ID. It uses functions to convert
+     * times to UTC for storage in the database.  Additionally it populates fields in the appointment
+     * object for formatted Strings of the time for viewer use.
+     * @param custID the customer ID used to retrieve information.
      * @return selectAppointments The list of select appointments.*/
     public static ObservableList<Appointment> getSelectAppointments(int custID){
         ObservableList<Appointment> selectAppointments = FXCollections.observableArrayList();
@@ -232,7 +143,6 @@ public abstract class DatabaseIO {
             PreparedStatement ps = JDBC.connection.prepareStatement(query);
             ResultSet rs = ps.executeQuery(query);
 
-//            LocalDateTime localDate = LocalDateTime.parse(strLocalDate, formatter);
             while(rs.next()) {
                 String start = rs.getTimestamp("Start").toString();
                 String end = rs.getObject("End").toString();
@@ -255,7 +165,10 @@ public abstract class DatabaseIO {
         }
     }
 
-    /**This returns the select list of appointments.
+    /**This returns the select list of appointments based on the contact name. It uses functions to convert
+     * times to UTC for storage in the database.  Additionally it populates fields in the appointment
+     * object for formatted Strings of the time for viewer use.
+     * @param contactName the contact name to index the search on.
      * @return selectAppointments The list of select appointments.*/
     public static ObservableList<Appointment> getSelectContactAppointments(String contactName){
         ObservableList<Appointment> selectAppointments = FXCollections.observableArrayList();
@@ -267,7 +180,6 @@ public abstract class DatabaseIO {
             PreparedStatement ps = JDBC.connection.prepareStatement(query);
             ResultSet rs = ps.executeQuery(query);
 
-//            LocalDateTime localDate = LocalDateTime.parse(strLocalDate, formatter);
             while(rs.next()) {
                 String start = rs.getTimestamp("Start").toString();
                 String end = rs.getObject("End").toString();
@@ -290,8 +202,10 @@ public abstract class DatabaseIO {
         }
     }
 
-    /**This returns the complete list of customers.
-     * @return allCustomers The complete list of customers.*/
+    /**This returns the complete list of appointments. It uses functions to convert
+     * times to UTC for storage in the database.  Additionally it populates fields in the appointment
+     * object for formatted Strings of the time for viewer use.
+     * @return allAppointments The complete list of appointments.*/
     public static ObservableList<Appointment> getAllAppointments(){
         ObservableList<Appointment> selectAppointments = FXCollections.observableArrayList();
         try {
@@ -324,9 +238,9 @@ public abstract class DatabaseIO {
     }
 
 
-    /**This deletes a product from the ObservableList.
+    /**This deletes an appointment from the database based on appointment ID.
      * @param apptID The ID of the appointment to delete.
-     * @return A boolean about if the product is deleted.*/
+     * @return A boolean about if the appointment is deleted.*/
     public static boolean deleteAppointment(int apptID){
         try {
             query = "DELETE FROM appointments Where Appointment_ID = '"
@@ -339,8 +253,8 @@ public abstract class DatabaseIO {
             return false;
         }
     }
-/**This returns the complete list of customers.
- * @return allCustomers The complete list of customers.*/
+    /**This returns the complete list of customers from the database.
+    * @return allCustomers The complete list of customers.*/
     public static ObservableList<Customer> getAllCustomers(){
         ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
         try {
@@ -355,7 +269,6 @@ public abstract class DatabaseIO {
                         rs.getString("Address"), rs.getString("Postal_Code"),
                         rs.getString("Phone"),rs.getString("Country"),
                         rs.getString("Division")));
-                System.out.println(allCustomers);
             }
             return allCustomers;
         } catch (Exception e) {
@@ -363,8 +276,8 @@ public abstract class DatabaseIO {
             return null;
         }
     }
-    /**This returns the complete list of products.
-     * @return allProducts The complete list of products.*/
+    /**This deletes the appointments indexed on customer id.
+     * @param custID the customer ID to query on.*/
     public static void deleteAssociatedAppointments(int custID){
         try {
             query = "DELETE FROM appointments Where Customer_ID = '"
@@ -376,6 +289,9 @@ public abstract class DatabaseIO {
         }
     }
 
+    /**This uses the given country value to retrieve first level division information from the database.
+     * @param country the country to index to retrieve first level divisions.
+     * @return allDivisions a list of all first level divisions in a given country.*/
     public static ObservableList<String> getDivisionCombo(String country){
         ObservableList<String> allDivisions = FXCollections.observableArrayList();
         try {
@@ -394,6 +310,8 @@ public abstract class DatabaseIO {
         }
     }
 
+    /**This retrieves countries to populate the country combobox.
+     * @return allcountries the list of all countries to populate the combobox.*/
     public static ObservableList<String> getCountryCombo(){
         ObservableList<String> allCountries = FXCollections.observableArrayList();
         try {
@@ -411,6 +329,13 @@ public abstract class DatabaseIO {
         }
     }
 
+    /**This checks the database for a valid login/password combo.  It uses the user id to retrieve
+     * the corresponding password and then checks that against the offered password value. If
+     * successful it returns a user id greater than 0.  Otherwise it returns 0.
+     * @param password the password
+     * @param userName the username
+     * @return an integer of the user ID
+     * */
     public static int checkLogin(String userName, String password) {
         try {
             query = "Select password, User_ID from client_schedule.users where user_name = '" + userName + "'";
@@ -427,6 +352,8 @@ public abstract class DatabaseIO {
         return 0;
     }
 
+    /**This retrieves customer IDs to populate the combobox.
+     * @return allcustomers the list of all customer IDs to populate the combobox.*/
     public static ObservableList getCustomerCombo() {
         ObservableList<String> allCustomers = FXCollections.observableArrayList();
         try {
@@ -444,6 +371,8 @@ public abstract class DatabaseIO {
         }
     }
 
+    /**This retrieves user IDs to populate the combobox.
+     * @return allUsers the list of all user IDs to populate the combobox.*/
     public static ObservableList getUserCombo() {
         ObservableList<String> allUsers = FXCollections.observableArrayList();
         try {
@@ -461,6 +390,10 @@ public abstract class DatabaseIO {
         }
     }
 
+    /**This retrieves a count based on month and type from the database.
+     * @param month the month to index on
+     * @param type the type to index on
+     * @return the count of attributes that correspond to count and month*/
     public static int countTypeMonth(String month, String type){
         int monthNumber = Month.valueOf(month.toUpperCase()).getValue();
         try {
@@ -481,6 +414,9 @@ public abstract class DatabaseIO {
         }
     }
 
+    /**This retrieves a count based on how many customers live in a given first level division.
+     * @param division the first level division to count instances of
+     * @return the count of attributes that correspond to the first level division.*/
     public static int countCountryDivision(String division){
         try {
             query =
@@ -498,9 +434,10 @@ public abstract class DatabaseIO {
             System.out.println(e);
             return 0;
         }
-
     }
 
+    /**This retrieves all contact names to populate the combobox.
+     * @return allContacts the list of all contact names to populate the combobox.*/
     public static ObservableList getContactCombo() {
         ObservableList<String> allContacts = FXCollections.observableArrayList();
         try {

@@ -3,6 +3,7 @@ package database;
 import java.sql.DriverManager;
 import java.sql.Connection;
 
+/**The main class to connect to the database. Contains connection properties.*/
 public abstract class JDBC {
     private static final String protocol = "jdbc";
     private static final String vendor = ":mysql:";
@@ -14,6 +15,7 @@ public abstract class JDBC {
     private static final String password = "Passw0rd!";
     public static Connection connection;
 
+    /**This opens the connection to the database.*/
     public static void openConnection(){
         try{
             Class.forName(driver);
@@ -24,6 +26,7 @@ public abstract class JDBC {
         }
     }
 
+    /**This closes the connection to the database.*/
     public static void closeConnection(){
         try{
             connection.close();
@@ -31,5 +34,4 @@ public abstract class JDBC {
             System.out.println("failed to close connection");
         }
     }
-
 }
