@@ -21,6 +21,7 @@ import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 
+/**Controlls the cusomter add/modify form.*/
 public class CustomerFormController
 {
     @javafx.fxml.FXML
@@ -143,7 +144,8 @@ public class CustomerFormController
      * the division combobox has a selected value,
      * Field types are checked by parsing and if an error is thrown an alert is shown.
      * It then creates a customer object and passes it to the database for modification or insertion.
-     * @param actionEvent button click*/
+     * @param actionEvent button click
+     * @throws java.io.IOException exception*/
     @Deprecated
     public void saveHandler(ActionEvent actionEvent) throws IOException {
         int custID = 0;

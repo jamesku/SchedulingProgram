@@ -171,7 +171,8 @@ public class TopLevelMenu implements Initializable
         for (Appointment a : tempList){
             if (a.getLocalDateTimeStart().isBefore(nowDT.plusMinutes(15))&& a.getLocalDateTimeStart().isAfter(nowDT)){
                 noOverlap = false;
-                String alertText = "Appointment "+a.getApID()+ " at "+a.getLocalDateTimeStart() +
+                String alertText = "Appointment "+a.getApID()+ " at "+
+                        UtcConversion.dtFormat(a.getLocalDateTimeStart()) +
                         " is begining in the next 15 minutes";
                 showAlert(alertText);
             }
@@ -334,6 +335,7 @@ public class TopLevelMenu implements Initializable
                 showAlert("Customer removed");
             }
             customersTable.setItems(DatabaseIO.getAllCustomers());
+            appointmentsTable.getItems().clear();
         }
     }
 
@@ -367,7 +369,7 @@ public class TopLevelMenu implements Initializable
      * Based on if a customer is selected or not, the appointments table will have all appointments or
      * just select appointments.
      * <p><b>LAMBDA EXPRESSION is included here as an alternative to move through an ObservableList
-     * and check if the object date qualifies.</b></p>
+     * and check if the object date qualifies.  It replaces the need for an explicit loop.</b></p>
      * @param actionEvent button click*/
     public void seeMonthAppointments(ActionEvent actionEvent){
         if(customersTable.getSelectionModel().getSelectedItem() == null) {
@@ -391,7 +393,6 @@ public class TopLevelMenu implements Initializable
                     });
             appointmentsTable.setItems(newList);
         }
-
     }
 
     /**The function request all appointments within the next week and sets the appointments table

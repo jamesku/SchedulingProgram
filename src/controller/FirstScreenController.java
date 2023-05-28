@@ -49,13 +49,15 @@ public class FirstScreenController implements Initializable {
      * when the screen is loaded.  It is used here set up the login form using text that is
      * eligible for translation based on the location of the accesing computer.
      * <p><b>LAMBDA EXPRESSION is included here which sets a handler on the loginPassword field
-     * to detect if the ENTER key is pressed. If so, it triggers the loginSubmit action.
+     * to detect if the ENTER key is pressed. If so, it triggers the loginSubmit action. This
+     * eliminates the need to define a separate anonymous inner class for the event handler.
      * </b></p>
      * @param url the URL
      * @param resourceBundle language translations
      * */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+//        Locale.setDefault(new Locale("fr"));
         Locale currentLocale = Locale.getDefault();
         if(!currentLocale.getLanguage().equals("en")){
             ResourceBundle rb = ResourceBundle.getBundle("localization/lang", currentLocale);
@@ -79,7 +81,9 @@ public class FirstScreenController implements Initializable {
     /**Handler for the login button to check if the user/password is valid by checking the database.
      * It also writes a log of successful and unsuccessful attemts to a text file.  If successful
      * user is sent to the toplevelmenu. If not, an alert is displayed.
-     * @param actionEvent the button click*/
+     * @param actionEvent the button click
+     * @throws java.io.IOException exception
+     * @throws java.sql.SQLException exception*/
     @javafx.fxml.FXML
     public void submitLogin(ActionEvent actionEvent) throws IOException, SQLException {
         FileOutputStream fos = new FileOutputStream("login_activity.txt", true);

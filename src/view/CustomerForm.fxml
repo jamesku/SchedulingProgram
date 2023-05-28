@@ -13,7 +13,7 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Label>
-      <Label layoutX="17.0" layoutY="83.0" text="ID" />
+      <Label layoutX="17.0" layoutY="83.0" text="Customer_ID" />
       <Label layoutX="17.0" layoutY="123.0" text="Name" />
       <Label layoutX="17.0" layoutY="163.0" text="Address" />
       <Label layoutX="17.0" layoutY="203.0" text="Postal Code" />

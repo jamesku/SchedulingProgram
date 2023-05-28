@@ -178,20 +178,20 @@ public class AppointmentFormController
 
         if(ApptCID.getValue() != null) {
             apCID = Integer.parseInt(ApptCID.getValue().toString());
-        }else{showAlert("Please check the Customer_ID value");}
+        }else{showAlert("Please check the Customer_ID value"); return;}
 
         if(ApptUID.getValue() != null) {
             apUID= Integer.parseInt(ApptUID.getValue().toString());
-        }else{showAlert("Please check the User_ID value");}
+        }else{showAlert("Please check the User_ID value"); return;}
 
         if(ApptContact.getValue() != null && !((String)ApptContact.getValue()).isEmpty()) {
             apContact= (String)ApptContact.getValue();
-        }else{showAlert("Please check the Contact value");}
+        }else{showAlert("Please check the Contact value"); return;}
 
         if(ApptDate.getValue() != null){
             apDate = LocalDate.parse(ApptDate.getValue().toString(), formatter);
         } else {
-            showAlert("Please check the type value");
+            showAlert("Please check the date value");
             return;
         }
 
@@ -201,11 +201,11 @@ public class AppointmentFormController
                 s = "0" + s;
             }
             apStart = LocalTime.parse(s, DateTimeFormatter.ofPattern("hh:mma", Locale.getDefault()));
-            }
-            else {
-                showAlert("Appointment time is outside business hours!");
-                return;
-            }
+        }
+        else {
+            showAlert("Please check the start time");
+            return;
+        }
 
         if(ApptEnd.getValue() != null){
             String t = ApptEnd.getValue().toString();
@@ -258,7 +258,7 @@ public class AppointmentFormController
                 return;
         }
 
-        if (ApptType.getValue() != null && !((String) ApptType.getValue()).isEmpty()) {
+        if (ApptType.getValue() != null)  {
             apType = (String) ApptType.getValue();
         } else {
             showAlert("Please check the type value");

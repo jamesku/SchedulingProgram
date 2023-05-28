@@ -122,7 +122,7 @@ public class ReportingFormController
         });
     }
 
-    /**This calculates the report value if both necessary fields (month & type) are complete after the
+    /**This calculates the report value if both necessary fields (month and type) are complete after the
      * type combo is changed.
      * @param actionEvent changed value*/
     @javafx.fxml.FXML
@@ -134,7 +134,7 @@ public class ReportingFormController
         }
     }
 
-    /**This calculates the report value if both necessary fields (month & type) are complete after the
+    /**This calculates the report value if both necessary fields (month and type) are complete after the
      * type month is changed.
      * @param actionEvent changed value*/
     @javafx.fxml.FXML

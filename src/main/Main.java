@@ -9,6 +9,9 @@ import javafx.stage.Stage;
 
 import java.util.Locale;
 
+/**Main class.
+ * JavaDocs in root.
+ * @author James Kuhr*/
 public class Main extends Application {
 
     @Override
@@ -20,7 +23,8 @@ public class Main extends Application {
 
     }
 
-
+    /**Main function
+     * @param args args*/
     public static void main(String[] args) {
         JDBC.openConnection();
         launch(args);

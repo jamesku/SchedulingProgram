@@ -86,7 +86,7 @@ public abstract class DatabaseIO {
     }
 
     /**This updates an appointment in the database.  It uses the provided appointment ID to select from
-     * a joined table of the customers and contact_names & IDs. It converts times to UTC for storage
+     * a joined table of the customers and contact_names and IDs. It converts times to UTC for storage
      * in the database.
      * @param newAppointment the new appointment to be updated
      * */
