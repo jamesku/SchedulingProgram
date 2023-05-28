@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="mainAP" prefHeight="521.0" prefWidth="929.0" style="-fx-background-color: light grey; -fx-border-width: 3; -fx-border-color: blue;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ReportingFormController">
+<AnchorPane fx:id="mainAP" prefHeight="521.0" prefWidth="929.0" style="-fx-background-color: light grey; -fx-border-width: 3; -fx-border-color: blue;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ReportingFormController">
     <children>
         <AnchorPane layoutX="7.0" layoutY="51.0" prefHeight="79.0" prefWidth="884.0" style="-fx-border-color: black; -fx-border-radius: 9;">
             <children>
@@ -28,8 +28,8 @@
                     </font></Label>
                 <Label layoutX="75.0" layoutY="40.0" text="Country:" />
                 <Label layoutX="320.0" layoutY="40.0" text="Division:" />
-                <ComboBox fx:id="comboCountry" layoutX="133.0" layoutY="36.0" prefWidth="150.0" />
-                <ComboBox fx:id="comboDivision" layoutX="389.0" layoutY="36.0" prefWidth="150.0" />
+                <ComboBox fx:id="comboCountry" layoutX="133.0" layoutY="36.0" onAction="#handleComboCountry" prefWidth="150.0" />
+                <ComboBox fx:id="comboDivision" layoutX="389.0" layoutY="36.0" onAction="#handleComboDivision" prefWidth="150.0" />
                 <TextField fx:id="countryDivisionTotal" editable="false" layoutX="636.0" layoutY="36.0" />
                 <Label layoutX="574.0" layoutY="40.0" text="Total:" />
             </children>

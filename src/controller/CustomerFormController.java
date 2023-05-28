@@ -104,6 +104,9 @@ public class CustomerFormController
         newCustomer = false;
     }
 
+    /** Handles a selection of a country in a combobox.  Using the selection it calls to the
+     * database to set up the first level division combobox.
+     * @param actionEvent actionEvent*/
     @javafx.fxml.FXML
     public void countryComboActionHandler(ActionEvent actionEvent) {
         int selectedIndex = comboCountry.getSelectionModel().getSelectedIndex();
@@ -111,6 +114,8 @@ public class CustomerFormController
         comboDivision.setItems(DatabaseIO.getDivisionCombo((String)comboCountry.getValue()));
     }
 
+    /** Handles a selection of a first level division in a combobox.
+     * @param actionEvent actionEvent*/
     @javafx.fxml.FXML
     public void divisionComboActionHandler(ActionEvent actionEvent) {
         int selectedIndex = comboDivision.getSelectionModel().getSelectedIndex();

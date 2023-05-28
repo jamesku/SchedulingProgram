@@ -172,7 +172,7 @@ public class TopLevelMenu implements Initializable
             }
         }
         if(noOverlap){
-            showAlert("There are no upcomming appointments in the next 15 minutes.");
+            showAlert("There are no upcoming appointments in the next 15 minutes.");
         }
     }
 
@@ -295,7 +295,7 @@ public class TopLevelMenu implements Initializable
     /**This function moves to the add part menu.
      * @param actionEvent the button being pressed
      * @throws IOException IOException*/
-    public void handleReporting(ActionEvent actionEvent) throws IOException {
+    public void handleReportingButton(ActionEvent actionEvent) throws IOException {
         stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(getClass().getResource("/View/Reporting.fxml"));
         stage.setScene(new Scene(scene));
@@ -420,9 +420,6 @@ public class TopLevelMenu implements Initializable
             ObservableList<Appointment> tempList = DatabaseIO.getAllAppointments();
             ObservableList<Appointment> newList = FXCollections.observableArrayList();
             for (Appointment a : tempList){
-//                LocalDateTime temp = a.getLocalDateTimeStart();
-//                LocalDateTime onemonthfromnow = LocalDateTime.now().plusMonths(1);
-//                boolean check = a.getLocalDateTimeEnd().isAfter(LocalDateTime.now().plusMonths(1));
                 if(a.getLocalDateTimeEnd().isBefore(LocalDateTime.now().plusMonths(1))){
                     newList.add(a);
                 }
@@ -433,11 +430,16 @@ public class TopLevelMenu implements Initializable
             appointmentsTable.setItems(DatabaseIO.getSelectAppointments(selectedCustomer.getCustID()));
             ObservableList<Appointment> tempList = appointmentsTable.getItems();
             ObservableList<Appointment> newList = FXCollections.observableArrayList();
-            for (Appointment a : tempList){
+            //added lambda expression here
+            tempList.forEach( (a) -> {
                 if(a.getLocalDateTimeEnd().isBefore(LocalDateTime.now().plusMonths(1))){
-                    newList.add(a);
-                }
-            }
+                    newList.add(a); }
+                    });
+//            for (Appointment a : tempList){
+//                if(a.getLocalDateTimeEnd().isBefore(LocalDateTime.now().plusMonths(1))){
+//                    newList.add(a);
+//                }
+//            }
             appointmentsTable.setItems(newList);
         }
 

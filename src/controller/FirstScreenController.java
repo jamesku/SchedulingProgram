@@ -10,8 +10,11 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -53,11 +56,24 @@ public class FirstScreenController implements Initializable {
         };
         ZonedDateTime timeZoneInfo = ZonedDateTime.now(ZoneId.systemDefault());
         loginLocation.setText(String.valueOf(timeZoneInfo.getZone()));
+
+        /**Lambda expression*/
+        loginPassword.setOnKeyPressed( event -> {
+            if( event.getCode() == KeyCode.ENTER ) {
+                loginSubmit.fire();
+            }
+        } );
     }
     @javafx.fxml.FXML
     public void submitLogin(ActionEvent actionEvent) throws IOException, SQLException {
-            int uid = DatabaseIO.checkLogin(loginUserName.getText(), loginPassword.getText());
+
+        FileOutputStream fos = new FileOutputStream("login_activity.txt", true);
+        String content = null;
+
+        fos.write();
+        int uid = DatabaseIO.checkLogin(loginUserName.getText(), loginPassword.getText());
         if(uid>0){
+            byte[] contentInBytes = content.getBytes();
 //            if(true){
                 TopLevelMenu.receiveData(uid);
             Stage stage = (Stage) ((Button) actionEvent.getSource()).getScene().getWindow();

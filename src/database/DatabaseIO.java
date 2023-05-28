@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -256,6 +257,43 @@ public abstract class DatabaseIO {
         }
     }
 
+    /**This returns the select list of appointments.
+     * @return selectAppointments The list of select appointments.*/
+    public static ObservableList<Appointment> getSelectContactAppointments(String contactName){
+        ObservableList<Appointment> selectAppointments = FXCollections.observableArrayList();
+        try {
+            query = "SELECT Appointment_ID, Title, Description, Location, Type, Start, End, " +
+                    "Customer_ID, User_ID, Contact_Name "+
+                    "FROM appointments JOIN contacts ON appointments.Contact_ID = contacts.Contact_ID "+
+                    "WHERE Contact_Name = '"+contactName+ "';";
+            PreparedStatement ps = JDBC.connection.prepareStatement(query);
+            ResultSet rs = ps.executeQuery(query);
+
+//            LocalDateTime localDate = LocalDateTime.parse(strLocalDate, formatter);
+            while(rs.next()) {
+                String start = rs.getTimestamp("Start").toString();
+                String end = rs.getObject("End").toString();
+                selectAppointments.add(new Appointment(rs.getInt("Appointment_ID"),
+                        rs.getString("Title"),
+                        rs.getString("Description"), rs.getString("Location"),
+                        rs.getString("Type"),
+                        UtcConversion.convertUTCtoLocal((LocalDateTime) rs.getObject("Start")),
+//                        rs.getTimestamp("Start").toLocalDateTime(),
+//                        rs.getTimestamp("End").toLocalDateTime(),
+//                        (LocalDateTime) rs.getObject("Start"),
+                        UtcConversion.convertUTCtoLocal((LocalDateTime) rs.getObject("End")),
+//                        (LocalDateTime) rs.getObject("End"),
+                        rs.getInt("Customer_ID"),
+                        rs.getInt("User_ID"),
+                        rs.getString("Contact_Name")));
+            }
+            return selectAppointments;
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+    }
+
     /**This returns the complete list of customers.
      * @return allCustomers The complete list of customers.*/
     public static ObservableList<Appointment> getAllAppointments(){
@@ -428,6 +466,46 @@ public abstract class DatabaseIO {
             System.out.println(e);
             return null;
         }
+    }
+
+    public static int countTypeMonth(String month, String type){
+        int monthNumber = Month.valueOf(month.toUpperCase()).getValue();
+        try {
+            query =
+            "SELECT COUNT(*) AS appointment_count "+
+            "FROM appointments "+
+            "WHERE MONTH(Start) = '"+monthNumber+"'"+
+                    "AND Type = '"+type+"';";
+            PreparedStatement ps = JDBC.connection.prepareStatement(query);
+            ResultSet rs = ps.executeQuery(query);
+            while(rs.next()) {
+                return(rs.getInt("appointment_count"));
+            }
+            return 0;
+        } catch (Exception e) {
+            System.out.println(e);
+            return 0;
+        }
+    }
+
+    public static int countCountryDivision(String division){
+        try {
+            query =
+                    "SELECT COUNT(*) AS division_count "+
+                            "FROM customers JOIN first_level_divisions ON "+
+                            "first_level_divisions.Division_ID = customers.Division_ID "+
+                            "WHERE Division = '"+division+"';";
+            PreparedStatement ps = JDBC.connection.prepareStatement(query);
+            ResultSet rs = ps.executeQuery(query);
+            while(rs.next()) {
+                return(rs.getInt("division_count"));
+            }
+            return 0;
+        } catch (Exception e) {
+            System.out.println(e);
+            return 0;
+        }
+
     }
 
     public static ObservableList getContactCombo() {
